@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\CartFrontController;
 use App\Http\Controllers\Frontend\HomeFrontController;
 use App\Http\Controllers\Frontend\ProductFrontController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,32 @@ Route::get('/shops/{product}', [ProductFrontController::class, 'show'])->name('p
 
 Route::get('/categories', [ProductFrontController::class, 'index'])->name('categories.index');
 Route::get('/categories/{category}', [ProductFrontController::class, 'show'])->name('categories.show');
+
+Route::middleware(['auth'])->group(function () {
+   // cart 
+    Route::get('/cart', function () {
+          return Inertia::render('Cart/Index');
+     })->name('cart.index');
+    
+     // add to cart
+    Route::post('/cart/add', [CartFrontController::class, 'addToCart'])
+    ->name('cart.add');
+
+    // delete from cart
+    Route::get('/cart/delete/{product}', [ProductFrontController::class, 'deleteFromCart'])->name('cart.delete');
+    // update cart
+    Route::post('/cart/update', [ProductFrontController::class, 'updateCart'])->name('cart.update');
+    
+    // checkout
+    Route::get('/checkout', function () {
+        return Inertia::render('Checkout/Index');
+    })->name('checkout.index');
+    // order confirmation
+    Route::get('/order-confirmation', function () {
+        return Inertia::render('Checkout/OrderConfirmation');
+    })->name('checkout.order-confirmation');
+});
+
 
 
 

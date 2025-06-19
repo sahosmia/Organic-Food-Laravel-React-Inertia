@@ -47,7 +47,7 @@ function Header() {
           <li className="group relative transition-all">
             <Link
               className="text-main flex gap-1 font-semibold hover:text-secondary transition-all"
-              href="shop"
+              href="shops"
             >
               Shop
             </Link>

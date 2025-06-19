@@ -3,7 +3,7 @@ import { formatPrice } from "@/utils/formatters";
 import { Link } from "@inertiajs/react";
 import React from "react";
 
-function ProductAll({ product }: { product: ProductType }) {
+function ProductItem({ product }: { product: ProductType }) {
     console.log(product);
 
     const hasDiscount = product.discount_type && (product.discount_value ?? 0) > 0;
@@ -16,7 +16,7 @@ function ProductAll({ product }: { product: ProductType }) {
                     {product.category && product.category.title}
                 </h5>
                 <div className="w-60 m-auto">
-                    {/* <img className="inline-block h-full" src={product.src} alt="" /> */}
+                    <img className="inline-block h-full" src={product.image_url} alt="" />
                 </div>
                 <div className="m-5 mt-0">
                     <h2 className="title-sm mb-2">{product.name}</h2>
@@ -63,4 +63,4 @@ function ProductAll({ product }: { product: ProductType }) {
     );
 }
 
-export default ProductAll;
+export default ProductItem;

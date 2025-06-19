@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
+            $table->text('additional_information')->nullable();
+            $table->text('another_product_description')->nullable();
             $table->decimal('price', 10, 2);
             $table->enum('discount_type', ['percentage', 'fixed'])->nullable();
             $table->decimal('discount_value', 10, 2)->nullable();
@@ -33,5 +35,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('products');
+    }
+    /**
+     * Get the additional information as an array.
+     *
+     * @return array
+     */
+    public function getAdditionalInformationAttribute($value)
+    {
+        return $value ? json_decode($value, true) : [];
     }
 };

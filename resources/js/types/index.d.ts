@@ -75,4 +75,39 @@ export interface ProductType {
     is_active: boolean;
     category?: CategoryType;
     discounted_price?: number;
+    image_url: string; 
+    another_product_description?: string; // Optional additional description
+    additional_information?: string | []; // Optional additional information
 }
+
+export interface PaginationLink {
+    url: string | null; // Can be null for prev/next when on first/last page
+    label: string;      // Page number, 'Next &raquo;', '&laquo; Previous'
+    active: boolean;    // True if it's the current page
+}
+
+export interface PaginationType<T> {
+    current_page: number;
+    data: T[]; // This is the array of your actual data (e.g., ProductType[])
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: PaginationLink[]; // Array of pagination links
+    next_page_url: string | null; // Can be null if on the last page
+    path: string;
+    per_page: number;
+    prev_page_url: string | null; // Can be null if on the first page
+    to: number;
+    total: number;
+}
+export interface AuthType {
+    user: {
+        id: number;
+        name: string;
+        email: string;
+    }[] | null;
+}
+
+
+   

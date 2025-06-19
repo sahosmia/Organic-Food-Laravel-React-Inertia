@@ -7,7 +7,8 @@ function FrontLayoutTemplate({ children }: { children: React.ReactNode }) {
     return (
         <>
             <Header />
-            {children}          <NewsLetter />
+            {children}
+            <NewsLetter />
             <Footer />
         </>
     )

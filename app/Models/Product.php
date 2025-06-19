@@ -16,6 +16,29 @@ class Product extends Model
         'description',
         'price',
         'is_active',
+        'slug',
+        'discount_type',
+        'discount_value',
+        'category_id',
+        'image',
+        'additional_information',
+        'another_product_description',
+    ];
+
+    protected $appends = [
+        'formatted_price',
+        'formatted_description',
+        'image_url',
+        'thumbnail_url',
+        'discounted_price',
+        // 'average_rating',
+        // 'stock_status',
+        // 'seo_title',
+        // 'seo_description',
+        // 'seo_keywords',
+        // 'url',
+        // 'availability_status',
+        // 'additional_information'
     ];
 
     /**
@@ -26,6 +49,9 @@ class Product extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'price' => 'decimal:2',
+        'discount_value' => 'decimal:2',
+        'additional_information' => 'array', // Assuming additional_information is stored as JSON
+        'another_product_description' => 'string', // Assuming this is a text field
     ];
     /**
      * Get the route key for the model.
@@ -101,54 +127,42 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
-    }
-    /**
-     * Get the product's reviews.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-    /**
-     * Get the product's ratings.
-     *
-     * @return float
-     */
-    public function getAverageRatingAttribute()
-    {
-        return $this->reviews()->avg('rating'); // Assuming 'rating' is a field in the reviews table
-    }
-    /**
-     * Get the product's stock status.
-     *
-     * @return string
-     */
-    public function getStockStatusAttribute()
-    {
-        return $this->stock > 0 ? 'In Stock' : 'Out of Stock'; // Assuming 'stock' is a field in the products table
-    }
-    /**
-     * Get the product's SEO title.
-     *
-     * @return string
-     */
-    public function getSeoTitleAttribute()
-    {
-        return $this->name . ' - ' . config('app.name'); // Assuming you want to append the app name to the product name
-    }
+    // public function tags()
+    // {
+    //     // return $this->belongsToMany(Tag::class);
+    // }
+   
+    
+    // Get the product's reviews.
+    // public function reviews()
+    // {
+    //     return $this->hasMany(Review::class);
+    // }
+    
+    // Get the product's average rating.
+    // public function getAverageRatingAttribute()
+    // {
+    //     return $this->reviews()->avg('rating'); 
+    // }
+   
+    // Get the product's stock status.
+    // public function getStockStatusAttribute()
+    // {
+    //     return $this->stock > 0 ? 'In Stock' : 'Out of Stock'; 
+    // }
+    
+    // Get the product's SEO title.
+    // public function getSeoTitleAttribute()
+    // {
+    //     return $this->name . ' - ' . config('app.name'); 
+    // }
 
 
-    protected $appends = ['discounted_price']; // Add your accessor name here
 
-    // discounted price by percentage and fixed amount, you will get discount_type, discount_value, and price from the product model
+    // Get the product's discounted price.
     public function getDiscountedPriceAttribute()
     {
-        $price = $this->attributes['price'] ?? 0; // Access original attribute to avoid recursion
+        $price = $this->attributes['price'] ?? 0; 
         $discountType = $this->attributes['discount_type'] ?? null;
         $discountValue = $this->attributes['discount_value'] ?? 0;
 
@@ -158,43 +172,34 @@ class Product extends Model
             return $price - $discountValue;
         }
 
-        return $price; // No discount applied, return original price
+        return $price; 
     }
-    /**
-     * Get the product's SEO description.
-     *
-     * @return string
-     */
+
+  // Get the product's SEO description.
     public function getSeoDescriptionAttribute()
     {
-        return substr(strip_tags($this->description), 0, 160); // Truncate the description to 160 characters for SEO
+        return substr(strip_tags($this->description), 0, 160); 
     }
-    /**
-     * Get the product's SEO keywords.
-     *
-     * @return string
-     */
-    public function getSeoKeywordsAttribute()
-    {
-        return implode(',', $this->tags->pluck('name')->toArray()); // Assuming you have a 'tags' relationship and want to use tag names as keywords
-    }
-    /**
-     * Get the product's URL.
-     *
-     * @return string
-     */
-    public function getUrlAttribute()
-    {
-        return route('products.show', $this->slug); // Assuming you have a route named 'products.show' that takes a slug
-    }
-    /**
-     * Get the product's availability status.
-     *
-     * @return string
-     */
-    public function getAvailabilityStatusAttribute()
-    {
-        return $this->stock > 0 ? 'Available' : 'Unavailable'; // Assuming 'stock' is a field in the products table
-    }
+    
+    // Get the product's SEO keywords.
+    // public function getSeoKeywordsAttribute()
+    // {
+    //     return implode(',', $this->tags->pluck('name')->toArray()); 
+    // }
+
+   
+    // Get the product's URL.
+    // public function getUrlAttribute()
+    // {
+    //     return route('products.show', $this->slug); 
+    // }
+   
+    // Get the product's availability status.
+    // public function getAvailabilityStatusAttribute()
+    // {
+    //     return $this->stock > 0 ? 'Available' : 'Unavailable'; 
+    // }
+  
+
 
 }

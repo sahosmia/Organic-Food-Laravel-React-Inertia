@@ -23,13 +23,29 @@ class ProductFrontController extends Controller
 
     public function show(Product $product)
     {
+          
         // Ensure the product is active
         if (!$product->is_active) {
             abort(404);
         }
 
+  
+
+        // Load the category relationship
+        $product->load(['category:title,id,slug']);
+
+        // products get by category and randomly with 4 limit
+        $products = Product::active()
+            ->with(['category:title,id,slug'])
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id) // Exclude the current product
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
         return Inertia::render('frontend/ShopDetails', [
             'product' => $product,
+            'relatedProducts' => $products,
         ]);
     }
 }

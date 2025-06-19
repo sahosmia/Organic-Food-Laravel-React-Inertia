@@ -1,5 +1,5 @@
-import MainBtn from '@/components/frontend/tools/btn/MainBtn'
 import aboutBg from '@/assets/about/about-one.png'
+import MainBtn from './tools/btn/MainBtn';
 function About() {
     return (
 
