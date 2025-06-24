@@ -4,7 +4,7 @@ import bannerImage from "@/assets/banner/banner-shop.png";
 import ProductItem from "@/components/frontend/ProductItem";
 
 function Shop({ products }: { products: PaginationType<ProductType> }) {
-    console.log(products);
+    // console.log(products);
     return (
         <div>
             <PageBanner bg={bannerImage} title="Shop Now" />

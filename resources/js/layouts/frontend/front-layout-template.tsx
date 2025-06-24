@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from './Header'
 import Footer from './Footer'
 import NewsLetter from './NewsLetter'
+import Header from './Header'
 
 function FrontLayoutTemplate({ children }: { children: React.ReactNode }) {
     return (

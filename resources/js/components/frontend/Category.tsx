@@ -2,7 +2,7 @@ import { CategoryType } from "@/types";
 import { Link } from "@inertiajs/react";
 
 function Category({ categories }: { categories: CategoryType[] }) {
-    console.log("Categories:", categories);
+    // console.log("Categories:", categories);
 
 
     return (

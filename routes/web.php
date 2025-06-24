@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\CartFrontController;
 use App\Http\Controllers\Frontend\HomeFrontController;
 use App\Http\Controllers\Frontend\ProductFrontController;
+use App\Http\Controllers\Frontend\ReviewController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,11 +16,11 @@ Route::get('/categories', [ProductFrontController::class, 'index'])->name('categ
 Route::get('/categories/{category}', [ProductFrontController::class, 'show'])->name('categories.show');
 
 Route::middleware(['auth'])->group(function () {
-   // cart 
+   // cart
     Route::get('/cart', function () {
           return Inertia::render('Cart/Index');
      })->name('cart.index');
-    
+
      // add to cart
     Route::post('/cart/add', [CartFrontController::class, 'addToCart'])
     ->name('cart.add');
@@ -28,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart/delete/{product}', [ProductFrontController::class, 'deleteFromCart'])->name('cart.delete');
     // update cart
     Route::post('/cart/update', [ProductFrontController::class, 'updateCart'])->name('cart.update');
-    
+
     // checkout
     Route::get('/checkout', function () {
         return Inertia::render('Checkout/Index');
@@ -37,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/order-confirmation', function () {
         return Inertia::render('Checkout/OrderConfirmation');
     })->name('checkout.order-confirmation');
+
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
 });
 
 

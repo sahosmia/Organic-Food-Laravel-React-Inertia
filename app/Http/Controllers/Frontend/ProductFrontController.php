@@ -12,7 +12,7 @@ class ProductFrontController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::active()->with(['category:title,id,slug'])
+        $products = Product::active()->with(['category:title,id,slug', 'reviews'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -23,20 +23,18 @@ class ProductFrontController extends Controller
 
     public function show(Product $product)
     {
-          
+
         // Ensure the product is active
         if (!$product->is_active) {
             abort(404);
         }
 
-  
-
-        // Load the category relationship
-        $product->load(['category:title,id,slug']);
+        // Load the category, reviews relationship
+        $product->load(['category:title,id,slug', 'reviews.user']);
 
         // products get by category and randomly with 4 limit
         $products = Product::active()
-            ->with(['category:title,id,slug'])
+            ->with(['category:title,id,slug','reviews'])
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id) // Exclude the current product
             ->inRandomOrder()

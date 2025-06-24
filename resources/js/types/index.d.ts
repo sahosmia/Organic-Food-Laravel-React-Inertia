@@ -44,15 +44,15 @@ export interface User {
 
 
 // Product::create([
-//     'name' => 'Air Conditioner',
-//     'slug' => 'air-conditioner',
-//     'description' => 'Energy-efficient air conditioner with smart features.',
-//     'price' => 799.99,
-//     'discount_type' => null,
-//     'discount_value' => null,
-//     'category_id' => 2, // Assuming category ID 2 exists
-//     'image' => 'images/products/air_conditioner.jpg',
-//     'is_active' => true,
+// 'name' => 'Air Conditioner',
+// 'slug' => 'air-conditioner',
+// 'description' => 'Energy-efficient air conditioner with smart features.',
+// 'price' => 799.99,
+// 'discount_type' => null,
+// 'discount_value' => null,
+// 'category_id' => 2, // Assuming category ID 2 exists
+// 'image' => 'images/products/air_conditioner.jpg',
+// 'is_active' => true,
 // ]);
 export interface CategoryType {
     id: number;
@@ -60,6 +60,17 @@ export interface CategoryType {
     slug: string;
     description?: string;
     image_url: string;
+}
+
+export interface ReviewType {
+    approved: boolean;
+    approved_at: string | null;
+    comment: string;
+    id: number;
+    product_id: number;
+    rating: number;
+    user_id: number;
+    created_at: string;
 }
 
 export interface ProductType {
@@ -75,15 +86,16 @@ export interface ProductType {
     is_active: boolean;
     category?: CategoryType;
     discounted_price?: number;
-    image_url: string; 
+    image_url: string;
+    reviews: ReviewType[],
     another_product_description?: string; // Optional additional description
     additional_information?: string | []; // Optional additional information
 }
 
 export interface PaginationLink {
     url: string | null; // Can be null for prev/next when on first/last page
-    label: string;      // Page number, 'Next &raquo;', '&laquo; Previous'
-    active: boolean;    // True if it's the current page
+    label: string; // Page number, 'Next &raquo;', '&laquo; Previous'
+    active: boolean; // True if it's the current page
 }
 
 export interface PaginationType<T> {
@@ -108,6 +120,3 @@ export interface AuthType {
         email: string;
     }[] | null;
 }
-
-
-   

@@ -131,30 +131,30 @@ class Product extends Model
     // {
     //     // return $this->belongsToMany(Tag::class);
     // }
-   
-    
+
+
     // Get the product's reviews.
-    // public function reviews()
-    // {
-    //     return $this->hasMany(Review::class);
-    // }
-    
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     // Get the product's average rating.
     // public function getAverageRatingAttribute()
     // {
-    //     return $this->reviews()->avg('rating'); 
+    //     return $this->reviews()->avg('rating');
     // }
-   
+
     // Get the product's stock status.
     // public function getStockStatusAttribute()
     // {
-    //     return $this->stock > 0 ? 'In Stock' : 'Out of Stock'; 
+    //     return $this->stock > 0 ? 'In Stock' : 'Out of Stock';
     // }
-    
+
     // Get the product's SEO title.
     // public function getSeoTitleAttribute()
     // {
-    //     return $this->name . ' - ' . config('app.name'); 
+    //     return $this->name . ' - ' . config('app.name');
     // }
 
 
@@ -162,7 +162,7 @@ class Product extends Model
     // Get the product's discounted price.
     public function getDiscountedPriceAttribute()
     {
-        $price = $this->attributes['price'] ?? 0; 
+        $price = $this->attributes['price'] ?? 0;
         $discountType = $this->attributes['discount_type'] ?? null;
         $discountValue = $this->attributes['discount_value'] ?? 0;
 
@@ -172,34 +172,34 @@ class Product extends Model
             return $price - $discountValue;
         }
 
-        return $price; 
+        return $price;
     }
 
   // Get the product's SEO description.
     public function getSeoDescriptionAttribute()
     {
-        return substr(strip_tags($this->description), 0, 160); 
+        return substr(strip_tags($this->description), 0, 160);
     }
-    
+
     // Get the product's SEO keywords.
     // public function getSeoKeywordsAttribute()
     // {
-    //     return implode(',', $this->tags->pluck('name')->toArray()); 
+    //     return implode(',', $this->tags->pluck('name')->toArray());
     // }
 
-   
+
     // Get the product's URL.
     // public function getUrlAttribute()
     // {
-    //     return route('products.show', $this->slug); 
+    //     return route('products.show', $this->slug);
     // }
-   
+
     // Get the product's availability status.
     // public function getAvailabilityStatusAttribute()
     // {
-    //     return $this->stock > 0 ? 'Available' : 'Unavailable'; 
+    //     return $this->stock > 0 ? 'Available' : 'Unavailable';
     // }
-  
+
 
 
 }

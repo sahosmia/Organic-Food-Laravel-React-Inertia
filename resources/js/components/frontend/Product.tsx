@@ -4,7 +4,7 @@ import ProductItem from "./ProductItem";
 
 function Product({ products }: { products: ProductType[] }) {
 
-    console.log("Products:", products);
+    // console.log("Products:", products);
 
     return (
         <div className="py-20">
