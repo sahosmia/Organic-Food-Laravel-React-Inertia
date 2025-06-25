@@ -38,6 +38,8 @@ Follow these steps to get your project up and running on your local machine:
     php artisan migrate --seed
     ```
     (Use `--seed` if your project includes seeders)
+    (Use `php artisan migrate:refresh --seed` if your database exists)
+
 
 6.  **Install Node modules:**
     ```bash
@@ -47,16 +49,21 @@ Follow these steps to get your project up and running on your local machine:
 7.  **Compile frontend assets:**
     For production build:
     ```bash
-    npm run build # Or yarn build
+    npm run build 
     ```
     For development (watch mode):
     ```bash
-    npm run dev # Or yarn dev
+    npm run dev 
     ```
 
 8.  **Start the Laravel development server:**
     ```bash
     php artisan serve
+    ```
+
+9.  **Storage Link:**
+    ```bash
+    php artisan storage:link
     ```
 
 Now, you should be able to view the project in your browser at `http://127.0.0.1:8000` (or the URL shown by `php artisan serve`).
