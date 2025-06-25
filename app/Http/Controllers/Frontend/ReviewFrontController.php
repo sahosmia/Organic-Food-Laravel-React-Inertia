@@ -9,7 +9,7 @@ use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Review;
 
-class ReviewController extends Controller{
+class ReviewFrontController extends Controller{
 
     public function store(Request $request)
     {

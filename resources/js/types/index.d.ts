@@ -120,3 +120,15 @@ export interface AuthType {
         email: string;
     }[] | null;
 }
+
+
+export interface TeamType {
+    id: number;
+    name: string;
+    image: string;
+    designation: string;
+    facebook_url: string;
+    instagram_url: string;
+    image_url: string;
+
+}

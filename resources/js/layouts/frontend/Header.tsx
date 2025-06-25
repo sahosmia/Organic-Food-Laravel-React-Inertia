@@ -34,7 +34,7 @@ function Header() {
         setIsDropdownOpen(prev => !prev); // Toggle visibility on click
     };
 
-      // Close dropdown when clicking outside
+    // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -97,7 +97,7 @@ function Header() {
                                 <Link href="/protfolio">Protfolio</Link>
                             </li>
                             <li className="p-2 border-b last:border-none">
-                                <Link href="/team">Team</Link>
+                                <Link href={route('team.index')}>Team</Link>
                             </li>
                         </ul>
                     </li>
@@ -120,7 +120,7 @@ function Header() {
                             />
                         </div>
                     </li>
-                  
+
 
                     <li className="relative" ref={dropdownRef}>
                         <div
