@@ -2,11 +2,14 @@ import PageBanner from '@/components/frontend/tools/PageBanner';
 import bannerImage from "@/assets/banner/banner-team.jpg";
 import { PaginationType, TeamType } from '@/types';
 import TeamItem from '@/components/frontend/TeamITem';
+import FrontLayout from '@/layouts/front-layout';
+import { Head } from '@inertiajs/react';
 
 function Team({ teams }: { teams: PaginationType<TeamType> }) {
 
     return (
-        <div>
+        <FrontLayout>
+            <Head title="Team" />
             <PageBanner bg={bannerImage} title="Team" />
             <div className="">
                 <div className="py-28">
@@ -27,7 +30,7 @@ function Team({ teams }: { teams: PaginationType<TeamType> }) {
                     </div>
                 </div>
             </div>
-        </div>
+        </FrontLayout>
     );
 }
 

@@ -1,14 +1,12 @@
 import React from "react";
-import MainTransparentBtn from "./tools/btn/MainTransparentBtn";
 import { Link } from "@inertiajs/react";
 
-function NewsAll({ newses }) {
-    
+function BlogItem({ blog }) {
+
   return (
-    <div className="container grid  lg:grid-cols-2 gap-4 mt-5">
-      {newses.map((news, i) => (
-        <div key={i} className="relative mb-60 ">
-          <img className="rounded-xl w-full" src={news.src} alt={`news-${i}`} />
+
+        <div  className="relative mb-60 ">
+          <img className="rounded-xl w-full" src={blog.thumbnail_url} alt={`blog-${blog.title}`} />
 
           <ul className="bg-light text-main text-xl font-bold rounded-full w-20 h-20  absolute top-4 md:top-8 left-4 md:left-8 flex flex-col justify-center items-center">
             <li>25</li>
@@ -21,14 +19,14 @@ function NewsAll({ newses }) {
                 <i className="fa-solid fa-user"></i>
               </span>
               <span className="text-main text-opensans">
-                By {news.created_by}
+                By {blog.author}
               </span>
             </div>
-            <h2 className="title-sm pb-2">{news.title}</h2>
-            <p className="pb-5">{news.des}</p>
+            <h2 className="title-sm pb-2">{blog.title}</h2>
+            <p className="pb-5">{blog.description}</p>
             <Link
-              to="/news-single"
-              state={news}
+               href={`/blogs/${blog.id}`}
+                state={blog}
               className="text-main font-bold rounded-xl flex items-center gap-2"
             >
               Read More
@@ -38,10 +36,9 @@ function NewsAll({ newses }) {
             </Link>
           </div>
         </div>
-      ))}
-    </div>
+
   );
 }
 
 
-export default NewsAll;
+export default BlogItem;

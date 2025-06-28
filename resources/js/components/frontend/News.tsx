@@ -1,6 +1,5 @@
 import React from "react";
 import MainTransparentBtn from "./tools/btn/MainTransparentBtn";
-import NewsAll from "./NewsAll";
 
 function News() {
   const newses = [
@@ -33,8 +32,8 @@ function News() {
           <MainTransparentBtn link="/news" text="More News" icon={true} />
         </div>
       </div>
-
-      <NewsAll newses={newses} />
+{/*
+      <NewAll newses={newses} /> */}
     </div>
   );
 }

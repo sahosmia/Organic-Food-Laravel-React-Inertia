@@ -94,7 +94,7 @@ function Header() {
 
                         <ul className="absolute top-6 left-0 w-56 border bg-main text-light rounded p-2 hidden transition-all duration-1000 group-hover:block">
                             <li className="p-2 border-b last:border-none">
-                                <Link href="/protfolio">Protfolio</Link>
+                                <Link href="/portfolios">Protfolio</Link>
                             </li>
                             <li className="p-2 border-b last:border-none">
                                 <Link href={route('team.index')}>Team</Link>
@@ -105,9 +105,9 @@ function Header() {
                     <li className="group relative transition-all">
                         <Link
                             className="text-main flex gap-1 font-semibold hover:text-secondary transition-all"
-                            href="news"
+                            href="blogs"
                         >
-                            News
+                            Blogs
                         </Link>
                     </li>
 
@@ -123,9 +123,12 @@ function Header() {
 
 
                     <li className="relative" ref={dropdownRef}>
+                        <Link href="/cart">
                         <div
                             className="flex items-center gap-2 rounded-full p-1 border-2 border-slate-200 cursor-pointer"
-                            onClick={handleCartClick}
+
+
+                            // onClick={handleCartClick}
 
                         >
                             <div className="w-10 h-10 bg-main rounded-full flex justify-center items-center">
@@ -136,7 +139,8 @@ function Header() {
                                 />
                             </div>
                             <span className="pr-5 text-main font-semibold">Cart ({totalCartItems})</span>
-                        </div>
+                            </div>
+                            </Link>
 
                         {/* Cart Dropdown Component */}
                         {isDropdownOpen && (
