@@ -123,12 +123,9 @@ function Header() {
 
 
                     <li className="relative" ref={dropdownRef}>
-                        <Link href="/cart">
                         <div
                             className="flex items-center gap-2 rounded-full p-1 border-2 border-slate-200 cursor-pointer"
-
-
-                            // onClick={handleCartClick}
+                            onClick={handleCartClick}
 
                         >
                             <div className="w-10 h-10 bg-main rounded-full flex justify-center items-center">
@@ -139,8 +136,7 @@ function Header() {
                                 />
                             </div>
                             <span className="pr-5 text-main font-semibold">Cart ({totalCartItems})</span>
-                            </div>
-                            </Link>
+                        </div>
 
                         {/* Cart Dropdown Component */}
                         {isDropdownOpen && (
