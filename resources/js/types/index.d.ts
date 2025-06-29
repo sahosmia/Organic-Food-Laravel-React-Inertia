@@ -18,8 +18,12 @@ export interface NavGroup {
 export interface NavItem {
     title: string;
     href: string;
-    icon?: LucideIcon | null;
+    icon: LucideIcon | null;
     isActive?: boolean;
+}
+export interface NavItemWithSubmenu extends NavItem {
+    href?: string;
+    submenu?: NavItem[] | null;
 }
 
 export interface SharedData {
@@ -43,17 +47,7 @@ export interface User {
 }
 
 
-// Product::create([
-// 'name' => 'Air Conditioner',
-// 'slug' => 'air-conditioner',
-// 'description' => 'Energy-efficient air conditioner with smart features.',
-// 'price' => 799.99,
-// 'discount_type' => null,
-// 'discount_value' => null,
-// 'category_id' => 2, // Assuming category ID 2 exists
-// 'image' => 'images/products/air_conditioner.jpg',
-// 'is_active' => true,
-// ]);
+
 export interface CategoryType {
     id: number;
     title: string;
@@ -113,6 +107,8 @@ export interface PaginationType<T> {
     to: number;
     total: number;
 }
+
+
 export interface AuthType {
     user: {
         id: number;
@@ -131,4 +127,12 @@ export interface TeamType {
     instagram_url: string;
     image_url: string;
 
+}
+
+
+export interface UserType {
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
 }

@@ -10,7 +10,7 @@ function Shop({ products }: { products: PaginationType<ProductType> }) {
             <PageBanner bg={bannerImage} title="Shop Now" />
             <div className="py-20">
                 {products.data && products.data.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                    <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                         {products.data.map((product) => (
                             <ProductItem key={product.id} product={product} />
                         ))}
