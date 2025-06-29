@@ -124,23 +124,23 @@ function Header() {
 
                     <li className="relative" ref={dropdownRef}>
                         <Link href="/cart">
-                        <div
-                            className="flex items-center gap-2 rounded-full p-1 border-2 border-slate-200 cursor-pointer"
+                            <div
+                                className="flex items-center gap-2 rounded-full p-1 border-2 border-slate-200 cursor-pointer"
 
 
                             // onClick={handleCartClick}
 
-                        >
-                            <div className="w-10 h-10 bg-main rounded-full flex justify-center items-center">
-                                <img
-                                    src="https://img.icons8.com/material-outlined/fafafa/shopping-cart--v1.png"
-                                    alt="shopping-cart"
-                                    className="w-5 inline-block"
-                                />
+                            >
+                                <div className="w-10 h-10 bg-main rounded-full flex justify-center items-center">
+                                    <img
+                                        src="https://img.icons8.com/material-outlined/fafafa/shopping-cart--v1.png"
+                                        alt="shopping-cart"
+                                        className="w-5 inline-block"
+                                    />
+                                </div>
+                                <span className="pr-5 text-main font-semibold">Cart ({totalCartItems})</span>
                             </div>
-                            <span className="pr-5 text-main font-semibold">Cart ({totalCartItems})</span>
-                            </div>
-                            </Link>
+                        </Link>
 
                         {/* Cart Dropdown Component */}
                         {isDropdownOpen && (
