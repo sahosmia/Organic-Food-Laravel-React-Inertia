@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -20,9 +20,10 @@ class CartFrontController extends Controller
             ->with('product')
             ->get();
 
-        return Inertia::render('Cart/Index', [
-            'cartItems' => $cartItems,
+        return Inertia::render('frontend/Cart', [
+            'cartsItems' => $cartItems,
         ]);
+
     }
 
     /**
@@ -42,13 +43,13 @@ class CartFrontController extends Controller
             'user_id' => Auth::id(),
             'product_id' => $product->id,
         ]);
-       
-        $cartItem->exists ? $cartItem->quantity += $quantity : $cartItem->quantity = $quantity;               
+
+        $cartItem->exists ? $cartItem->quantity += $quantity : $cartItem->quantity = $quantity;
 
         $cartItem->save();
         return back()->with('success', 'Product added to cart successfully!');
 
-    
+
 
     }
 }

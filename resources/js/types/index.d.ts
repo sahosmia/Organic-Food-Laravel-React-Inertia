@@ -132,3 +132,15 @@ export interface TeamType {
     image_url: string;
 
 }
+
+export interface PortfolioType {
+    id: number;
+    title: string;
+    category: string;
+    thumbnail: string;
+    thumbnail_url: string;
+    description: string;
+    project_url: string;
+    slug: string;
+
+}

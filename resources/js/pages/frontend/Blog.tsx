@@ -1,60 +1,32 @@
 import React from "react";
-import NewsAll from "../component/NewsAll";
-import PageBanner from "../component/tools/PageBanner";
 
-function Blog() {
-  const newses = [
-    {
-      src: "/img/news/one.png",
-      date: "25 Nov",
-      created_by: "Rachi Card",
-      title: "The Benefits of Vitamin D & How to get it",
-      des: "Simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-    },
-    {
-      src: "/img/news/two.png",
-      date: "25 Nov",
-      created_by: "Rachi Card",
-      title: "Our Favorite Summertime Tomato",
-      des: "Simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-    },
-    {
-      src: "/img/news/three.png",
-      date: "25 Nov",
-      created_by: "Rachi Card",
-      title: "Benefits of Vitamin C & How to get it",
-      des: "Simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-    },
-    {
-      src: "/img/news/four.png",
-      date: "25 Nov",
-      created_by: "Rachi Card",
-      title: "Research More Organic Foods",
-      des: "Simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-    },
-    {
-      src: "/img/news/five.png",
-      date: "25 Nov",
-      created_by: "Rachi Card",
-      title: "The Benefits of Vitamin D & How to get it",
-      des: "Simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-    },
-    {
-      src: "/img/news/six.png",
-      date: "25 Nov",
-      created_by: "Rachi Card",
-      title: "The Benefits of Vitamin D & How to get it",
-      des: "Simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-    },
-  ];
-  return (
-    <div>
-      <PageBanner bg="bg-banner-blog" title="Recant Blog" />
-      <div className="py-20">
-        <NewsAll newses={newses} />
-      </div>
-    </div>
-  );
+import PageBanner from "@/components/frontend/tools/PageBanner";
+import { Head } from "@inertiajs/react";
+import FrontLayout from "@/layouts/front-layout";
+
+import bannerImage from "@/assets/banner/banner-portfolio.png";
+import BlogItem from "@/components/frontend/BlogItem";
+
+function Blog({ blogs }: { blogs: { data: any[] } }) {
+
+    return (
+        <>
+
+            <FrontLayout >
+
+                <Head title="Blogs"></Head>
+                <PageBanner bg={bannerImage} title="Recent Blogs" />
+                <div className="py-20">
+                    <div className="container grid  lg:grid-cols-2 gap-4 mt-5">
+                        {blogs.data.map((blog, i) => (
+                            <BlogItem blog={blog} key={i} />
+                        ))}
+                    </div>
+                </div>
+
+            </FrontLayout>
+        </>
+    );
 }
 
 export default Blog;

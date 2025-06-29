@@ -23,13 +23,12 @@ Route::get('/categories/{category}', [ProductFrontController::class, 'show'])->n
 
 Route::get('/teams', [TeamController::class, 'index'])->name('team.index');
 
-Route::get('/portfolios', [ProductFrontController::class, 'index'])->name('portfolio.index');
-Route::get('/portfolios/{portfolio}', [PortfolioFrontController::class, 'show'])->name('portfolio.show');
+Route::get('/portfolios', [PortfolioFrontController::class, 'index'])->name('portfolio.index');
+Route::get('/portfolios/{id}', [PortfolioFrontController::class, 'show'])->name('portfolio.show');
 
 Route::get('/blogs', [BlogFrontController::class, 'index'])->name('blogs.index');
-Route::get('/blogs', [BlogFrontController::class, 'show'])->name('blogs.show');
+Route::get('/blogs/{id}', [BlogFrontController::class, 'show'])->name('blogs.show');
 
-Route::get('/blogs', [BlogFrontController::class, 'show'])->name('blogs.show');
 
 
 
