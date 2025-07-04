@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\{
     BlogFrontController,
     CartFrontController,
+    CheckoutFrontController,
     HomeFrontController,
     PortfolioFrontController,
     ProductFrontController,
@@ -41,14 +42,21 @@ Route::middleware(['auth'])->group(function () {
     ->name('cart.add');
 
     // delete from cart
-    Route::get('/cart/delete/{product}', [ProductFrontController::class, 'deleteFromCart'])->name('cart.delete');
+    Route::get('/cart/delete/{product}', [ProductFrontController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart/delete/{product}', [CartFrontController::class, 'remove'])->name('cart.remove');
+
     // update cart
     Route::post('/cart/update', [ProductFrontController::class, 'updateCart'])->name('cart.update');
+    Route::put('/cart/update/{id}', [CartFrontController::class, 'updateQuantity'])->name('cart.update');
 
-    // checkout
-    Route::get('/checkout', function () {
-        return Inertia::render('Checkout/Index');
-    })->name('checkout.index');
+    // // checkout
+    // Route::get('/checkout', function () {
+    //     return Inertia::render('Checkout/Index');
+    // })->name('checkout.index');
+
+    Route::get('/checkout', [CheckoutFrontController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutFrontController::class, 'store'])->name('checkout.store');
+
     // order confirmation
     Route::get('/order-confirmation', function () {
         return Inertia::render('Checkout/OrderConfirmation');
