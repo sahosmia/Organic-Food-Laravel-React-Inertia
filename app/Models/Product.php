@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\IsActive;
+use App\Traits\SlugAsRouteKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
+    use SlugAsRouteKey, IsActive;
+
     protected $fillable = [
         'name',
         'description',
-        'price',
+        'price',    
         'is_active',
         'slug',
         'discount_type',
@@ -27,7 +27,6 @@ class Product extends Model
 
     protected $appends = [
         'formatted_price',
-        'formatted_description',
         'image_url',
         'thumbnail_url',
         'discounted_price',
@@ -41,32 +40,19 @@ class Product extends Model
         // 'additional_information'
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+
     protected $casts = [
         'is_active' => 'boolean',
         'price' => 'decimal:2',
         'discount_value' => 'decimal:2',
-        'additional_information' => 'array', // Assuming additional_information is stored as JSON
-        'another_product_description' => 'string', // Assuming this is a text field
+        'additional_information' => 'array',
+        'another_product_description' => 'string',
     ];
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug'; // Assuming you have a 'slug' field for SEO-friendly URLs
-    }
 
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
+
+
+
+
     /**
      * Scope a query to order products by creation date.
      *
@@ -77,60 +63,35 @@ class Product extends Model
     {
         return $query->orderBy('created_at', 'desc');
     }
+
     /**
      * Get the formatted price.
      *
      * @return string
      */
+
     public function getFormattedPriceAttribute()
     {
         return number_format($this->price, 2, '.', ',');
     }
-    /**
-     * Get the product's description with HTML formatting.
-     *
-     * @return string
-     */
-    public function getFormattedDescriptionAttribute()
-    {
-        return nl2br(e($this->description)); // Convert new lines to <br> tags and escape HTML
-    }
-    /**
-     * Get the product's image URL.
-     *
-     * @return string
-     */
+
+
+
     public function getImageUrlAttribute()
     {
-        return asset('storage/products/' . $this->image); // Assuming you store images in the 'storage/products' directory
+        return asset('storage/products/' . $this->image);
     }
-    /**
-     * Get the product's thumbnail URL.
-     *
-     * @return string
-     */
+
     public function getThumbnailUrlAttribute()
     {
-        return asset('storage/products/thumbnails/' . $this->thumbnail); // Assuming you store thumbnails in the 'storage/products/thumbnails' directory
+        return asset('storage/products/thumbnails/' . $this->thumbnail);
     }
-    /**
-     * Get the product's category.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-    /**
-     * Get the product's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    // public function tags()
-    // {
-    //     // return $this->belongsToMany(Tag::class);
-    // }
+
 
 
     // Get the product's reviews.

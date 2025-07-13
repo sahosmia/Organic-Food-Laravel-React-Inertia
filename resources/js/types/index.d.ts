@@ -5,6 +5,25 @@ export interface Auth {
     user: User;
 }
 
+export interface SharedProps {
+    cart?: {
+        items: {
+            [key: string]: {
+                id: number;
+                name: string;
+                price: number;
+                quantity: number;
+                image_url?: string;
+            };
+        };
+        totalItems: number;
+        totalAmount: number;
+    };
+    [key: string]: unknown;
+    auth: {
+        user: null;
+    };
+}
 export interface BreadcrumbItem {
     title: string;
     href: string;
@@ -18,7 +37,7 @@ export interface NavGroup {
 export interface NavItem {
     title: string;
     href: string;
-    icon: LucideIcon | null;
+    icon?: LucideIcon | null;
     isActive?: boolean;
 }
 export interface NavItemWithSubmenu extends NavItem {
@@ -43,7 +62,7 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+    [key: string]: unknown;
 }
 
 
@@ -53,7 +72,10 @@ export interface CategoryType {
     title: string;
     slug: string;
     description?: string;
+    image: string;
     image_url: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface ReviewType {
@@ -135,4 +157,10 @@ export interface UserType {
     name: string;
     email: string;
     created_at: string;
+    is_active: boolean;
+}
+export interface Column<T> {
+    header: string;
+    accessor: keyof T | ((item: T) => React.ReactNode);
+    className?: string;
 }

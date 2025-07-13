@@ -12,18 +12,19 @@ export function NavMain({ items = [] }: { items: NavItemWithSubmenu[] }) {
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => (
-
                     item.submenu && item.submenu.length > 0 ? (
                         <Collapsible
-                            defaultOpen={item.submenu.some(subitem => page.url.startsWith(subitem.href))}
+                            defaultOpen={item.submenu.some(subitem => subitem.href && page.url.startsWith(subitem.href))}
                             className="group/collapsible"
                             key={item.title}
+
                         >
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
                                     <SidebarMenuButton
                                         isActive={
-                                            page.url === item.href || (item.submenu && item.submenu.some(subitem => page.url.startsWith(subitem.href)))
+                                            (item.href && page.url === item.href) ||
+                                            (item.submenu && item.submenu.some(subitem => subitem.href && page.url.startsWith(subitem.href)))
                                         }
                                         tooltip={{ children: item.title }}
                                     >
@@ -38,11 +39,13 @@ export function NavMain({ items = [] }: { items: NavItemWithSubmenu[] }) {
                                 <SidebarMenuSub>
                                     {item.submenu.map((subitem) => (
                                         <SidebarMenuSubItem key={subitem.title}>
-                                            <SidebarMenuSubButton asChild isActive={page.url.startsWith(subitem.href)}>
-                                                <Link href={subitem.href} prefetch>
-                                                    {subitem.icon && <subitem.icon />}
-                                                    <span>{subitem.title}</span>
-                                                </Link>
+                                            <SidebarMenuSubButton asChild isActive={!!subitem.href && page.url.startsWith(subitem.href)}>
+                                                {subitem.href && (
+                                                    <Link href={subitem.href} prefetch>
+                                                        {subitem.icon && <subitem.icon />}
+                                                        <span>{subitem.title}</span>
+                                                    </Link>
+                                                )}
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>
                                     ))}
@@ -51,14 +54,27 @@ export function NavMain({ items = [] }: { items: NavItemWithSubmenu[] }) {
                         </Collapsible>
                     ) : (
                         <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton asChild isActive={page.url === item.href} tooltip={{ children: item.title }}>
-                                {item.href &&
+                            {item.href ? (
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={page.url === item.href}
+                                    tooltip={{ children: item.title }}
+                                >
                                     <Link href={item.href} prefetch>
                                         {item.icon && <item.icon />}
                                         <span>{item.title}</span>
                                     </Link>
-                                }
-                            </SidebarMenuButton>
+                                </SidebarMenuButton>
+                            ) : (
+
+                                <SidebarMenuButton
+                                    isActive={page.url === item.href}
+                                    tooltip={{ children: item.title }}
+                                >
+                                    {item.icon && <item.icon />}
+                                    <span>{item.title}</span>
+                                </SidebarMenuButton>
+                            )}
                         </SidebarMenuItem>
                     )
                 ))}

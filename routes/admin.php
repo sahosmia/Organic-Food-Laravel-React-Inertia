@@ -12,25 +12,46 @@ Route::prefix('admin/')->name('admin.')->middleware(['auth', 'verified'])->group
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+
+
     Route::prefix('product-module/')->name('product_m.')->group(function(){
         Route::resource('products', ProductController::class)->except(['create', 'edit']);
-        Route::resource('categories', CategoryController::class)->except(['create', 'edit']);
+        Route::resource('categories', CategoryController::class);
     });
 
+
+
     Route::prefix('user-module/')->name('user_m.')->group(function(){
-        Route::resource('users', UserController::class)->except(['edit']);
+
+        Route::resource('users', UserController::class)->except(['']);
+        Route::put('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
+        ->name('users.toggleStatus');
+
+        Route::delete('/users/bulk-destroy', [UserController::class, 'bulkDestroy'])
+        ->name('users.bulkDestroy');
+
+
         // Route::resource('roles', RoleController::class)->except(['create', 'edit']);
     });
+
+
+
 
     Route::prefix('order-module/')->name('order_m.')->group(function(){
         // Route::resource('orders', OrderController::class)->except(['create', 'edit']);
         // Route::get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     });
 
+
+
+
     Route::prefix('marketing-sales-module/')->name('marketing_s.')->group(function(){
         // Route::resource('discounts', DiscountController::class)->except(['create', 'edit']);
         // Route::resource('coupons', CouponController::class)->except(['create', 'edit']);
     });
+
+
+
 
     Route::prefix('content-communication-module/')->name('content_c.')->group(function(){
         // Route::resource('blogs', BlogController::class)->except(['create', 'edit']);
