@@ -104,28 +104,28 @@ export interface ProductType {
     discounted_price?: number;
     image_url: string;
     reviews: ReviewType[],
-    another_product_description?: string; // Optional additional description
-    additional_information?: string | []; // Optional additional information
+    another_product_description?: string;
+    additional_information?: string | [];
 }
 
 export interface PaginationLink {
-    url: string | null; // Can be null for prev/next when on first/last page
-    label: string; // Page number, 'Next &raquo;', '&laquo; Previous'
-    active: boolean; // True if it's the current page
+    url: string | null;
+    label: string;
+    active: boolean;
 }
 
 export interface PaginationType<T> {
     current_page: number;
-    data: T[]; // This is the array of your actual data (e.g., ProductType[])
+    data: T[];
     first_page_url: string;
     from: number;
     last_page: number;
     last_page_url: string;
-    links: PaginationLink[]; // Array of pagination links
-    next_page_url: string | null; // Can be null if on the last page
+    links: PaginationLink[];
+    next_page_url: string | null;
     path: string;
     per_page: number;
-    prev_page_url: string | null; // Can be null if on the first page
+    prev_page_url: string | null;
     to: number;
     total: number;
 }
@@ -162,6 +162,14 @@ export interface PortfolioType {
     slug: string;
 
 }
+export interface CartType {
+    id: number;
+    user_id: number;
+    product_id: number;
+    quantity: number;
+    product: ProductType;
+}
+
 export interface UserType {
     id: number;
     name: string;
@@ -174,11 +182,5 @@ export interface Column<T> {
     accessor: keyof T | ((item: T) => React.ReactNode);
     className?: string;
 }
-export interface CartType{
-    id: number;
-    user_id: number;
-    product_id: number;
-    quantity: number;
-    product: ProductType;
-}
+
 

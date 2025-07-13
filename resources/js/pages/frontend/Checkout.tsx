@@ -1,5 +1,5 @@
 import bannerImage from "@/assets/banner/banner-portfolio.png";
-import React, { useState } from "react";
+import React from "react";
 import PageBanner from "@/components/frontend/tools/PageBanner";
 import FrontLayout from "@/layouts/front-layout";
 import { Head, useForm, usePage } from "@inertiajs/react";
@@ -18,7 +18,7 @@ function Checkout({ cartItems, total }) {
         delivery_charge: 0, // default: 0 (inside Dhaka)
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         post("/checkout");
     };

@@ -1,4 +1,3 @@
-import React from "react";
 import banner from "@/assets/banner/banner-portfolio.png";
 import PageBanner from "@/components/frontend/tools/PageBanner";
 import { PortfolioItem } from "@/components/frontend/PortfolioItem";
