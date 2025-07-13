@@ -10,7 +10,7 @@ import FrontLayout from "@/layouts/front-layout";
 import { CategoryType, ProductType } from "@/types";
 
 function Home({ products, categories }: { products: ProductType[], categories: CategoryType[] }) {
-    console.log("Products in Home:", products);
+    // console.log("Products in Home:", products);
 
 
     return (
