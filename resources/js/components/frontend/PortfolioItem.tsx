@@ -2,7 +2,6 @@ import { Link } from "@inertiajs/react";
 import React from "react";
 
 export function PortfolioItem({ portfolio }) {
-    console.log("PortfolioItem:", portfolio);
     return (
         <div>
             <div className="relative group">
