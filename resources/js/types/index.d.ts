@@ -174,3 +174,11 @@ export interface Column<T> {
     accessor: keyof T | ((item: T) => React.ReactNode);
     className?: string;
 }
+export interface CartType{
+    id: number;
+    user_id: number;
+    product_id: number;
+    quantity: number;
+    product: ProductType;
+}
+

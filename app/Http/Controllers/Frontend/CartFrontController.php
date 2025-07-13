@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -20,10 +21,11 @@ class CartFrontController extends Controller
             ->with('product')
             ->get();
 
-        return Inertia::render('frontend/Cart', [
-            'cartsItems' => $cartItems,
-        ]);
 
+
+        return Inertia::render('frontend/Cart', [
+            'cartItems' => $cartItems,
+        ]);
     }
 
     /**
@@ -39,7 +41,7 @@ class CartFrontController extends Controller
         $product = Product::findOrFail($request->product_id);
         $quantity = $request->quantity;
 
-         $cartItem = Cart::firstOrNew([
+        $cartItem = Cart::firstOrNew([
             'user_id' => Auth::id(),
             'product_id' => $product->id,
         ]);
@@ -48,8 +50,32 @@ class CartFrontController extends Controller
 
         $cartItem->save();
         return back()->with('success', 'Product added to cart successfully!');
-
-
-
     }
+
+    public function remove($id)
+    {
+        $cartItem = Cart::where('user_id', Auth::id())
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $cartItem->delete();
+
+        return back()->with('success', 'Item removed from cart.');
+    }
+
+    public function updateQuantity(Request $request, $id)
+{
+    $request->validate([
+        'quantity' => 'required|integer|min:1',
+    ]);
+
+    $cartItem = Cart::where('user_id', Auth::id())
+        ->where('id', $id)
+        ->firstOrFail();
+
+    $cartItem->quantity = $request->quantity;
+    $cartItem->save();
+
+    return back()->with('success', 'Cart updated.');
+}
 }
