@@ -30,7 +30,9 @@ Route::get('/blogs', [BlogFrontController::class, 'index'])->name('blogs.index')
 Route::get('/blogs/{id}', [BlogFrontController::class, 'show'])->name('blogs.show');
 
 
-
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::get('/settings', [UserController::class, 'settings'])->name('settings.index');
 
 Route::middleware(['auth'])->group(function () {
    // cart

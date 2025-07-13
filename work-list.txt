@@ -1,0 +1,40 @@
+Table Create :
+Order Table :
+=> id,
+=>user_id (foren key search by ai or any where, it means user table id belong on order table),
+=>order_date,
+=>total_amount,
+=>order_status (Pending, Processing, Shipped, Delivered, Cancelled), type will enum
+=>shipping_address
+=>payment_method,
+=>payment_status (Paid, Unpaid, Refunded), type will enum
+=>discount_amount।
+
+
+
+OrderItem:
+=> id,
+=> order_id (forein key),
+=> product_id (forein key),
+=> variant_id (nullable),
+=> quantity,
+=> unit_price,
+=> subtotal
+
+
+Coupons:
+=> id,
+=> coupon_code,
+=> discount_type (Percentage, Fixed Amount),
+=> discount_value,
+=> min_order_amount,
+=> usage_limit,
+=> used_count,
+=> start_date,
+=> end_date,
+=> is_active
+
+
+
+File :
+sideber menu list => resources\js\components\app-sidebar.tsx

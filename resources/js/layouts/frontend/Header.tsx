@@ -1,37 +1,28 @@
-import { Link, usePage } from "@inertiajs/react";
-import logo from "../../assets/logo.png";
-import CartDropdown from "@/components/frontend/kits/CartDropdown";
-import { useEffect, useRef, useState } from "react";
+import CartDropdown from '@/components/frontend/kits/CartDropdown';
+import ProfileDropdown from '@/components/frontend/kits/ProfileDropdown';
+import { Link, usePage } from '@inertiajs/react';
+import { LogIn, Search, ShoppingCart } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import logo from '../../assets/logo.png';
+import { SharedProps } from '@/types';
 
-interface SharedProps {
-    cart?: {
-        items: {
-            [key: string]: { // key is product_id
-                id: number;
-                name: string;
-                price: number;
-                quantity: number;
-                image_url?: string;
-            };
-        };
-        totalItems: number;
-        totalAmount: number;
-    };
-    // Add other shared props here (e.g., auth.user, flash messages)
-}
+
 
 function Header() {
-    const { props } = usePage<SharedProps>(); // Access shared Inertia props
+    const { props } = usePage<SharedProps>();
+    const { auth } = props;
     const totalCartItems = props.cart?.totalItems || 0;
-    const cartItemsArray = Object.values(props.cart?.items || {}); // Convert object to array for mapping
+    const cartItemsArray = Object.values(props.cart?.items || {});
     const cartTotalAmount = props.cart?.totalAmount || 0;
 
+    // console.log(auth);
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null); // Ref for detecting clicks outside
+    const dropdownRef = useRef<HTMLLIElement>(null);
 
     // Handler for opening the dropdown
     const handleCartClick = () => {
-        setIsDropdownOpen(prev => !prev); // Toggle visibility on click
+        setIsDropdownOpen((prev) => !prev);
     };
 
     // Close dropdown when clicking outside
@@ -49,7 +40,7 @@ function Header() {
 
     return (
         <header className="bg-light">
-            <nav className="container h-24 flex justify-between items-center gap-1 lg:gap-10">
+            <nav className="container flex h-24 items-center justify-between gap-1 lg:gap-10">
                 {/* logo  */}
                 <div className="">
                     <Link href="/">
@@ -57,101 +48,79 @@ function Header() {
                     </Link>
                 </div>
 
-                <ul className="hidden lg:flex gap-3 lg:gap-8 items-center font-roboto">
+                <ul className="hidden items-center gap-3 font-roboto lg:flex lg:gap-8">
                     <li className="group relative transition-all">
-                        <Link
-                            className="text-main flex gap-1 font-semibold hover:text-secondary transition-all"
-                            href="/"
-                        >
+                        <Link className="flex gap-1 font-semibold text-main transition-all hover:text-secondary" href="/">
                             Home
                         </Link>
                     </li>
 
                     <li className="group relative transition-all">
-                        <Link
-                            className="text-main flex gap-1 font-semibold hover:text-secondary transition-all"
-                            href="shops"
-                        >
+                        <Link className="flex gap-1 font-semibold text-main transition-all hover:text-secondary" href="shops">
                             Shop
                         </Link>
                     </li>
 
                     <li className="group relative transition-all">
-                        <Link
-                            className="text-main flex gap-1 font-semibold hover:text-secondary transition-all"
-                            href="#"
-                        >
+                        <Link className="flex gap-1 font-semibold text-main transition-all hover:text-secondary" href="#">
                             Page
                             <div className="flex items-center transition-all">
-                                <span className="group-hover:hidden text-sm">
+                                <span className="text-sm group-hover:hidden">
                                     <i className="fa-solid fa-angle-down"></i>
                                 </span>
-                                <span className="hidden group-hover:block text-sm">
+                                <span className="hidden text-sm group-hover:block">
                                     <i className="fa-solid fa-angle-up"></i>
                                 </span>
                             </div>
                         </Link>
 
-                        <ul className="absolute top-6 left-0 w-56 border bg-main text-light rounded p-2 hidden transition-all duration-1000 group-hover:block">
-                            <li className="p-2 border-b last:border-none">
-                                <Link href="/portfolios">Protfolio</Link>
+                        <ul className="absolute top-6 left-0 hidden w-56 rounded border bg-main p-2 text-light transition-all duration-1000 group-hover:block">
+                            <li className="border-b p-2 last:border-none">
+                                <Link href="/protfolio">Protfolio</Link>
                             </li>
-                            <li className="p-2 border-b last:border-none">
+                            <li className="border-b p-2 last:border-none">
                                 <Link href={route('team.index')}>Team</Link>
                             </li>
                         </ul>
                     </li>
 
                     <li className="group relative transition-all">
-                        <Link
-                            className="text-main flex gap-1 font-semibold hover:text-secondary transition-all"
-                            href="blogs"
-                        >
-                            Blogs
+                        <Link className="flex gap-1 font-semibold text-main transition-all hover:text-secondary" href="news">
+                            News
                         </Link>
                     </li>
 
-                    <li className="flex ">
-                        <div className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center">
-                            <img
-                                src="https://img.icons8.com/ios-glyphs/fafafa/search--v1.png"
-                                alt="search--v1"
-                                className="w-5 inline-block"
-                            />
+
+                </ul>
+
+                <ul className='flex items-center gap-4'>
+                    <li className="flex">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
+                            <Search className="w-5 text-white" />
                         </div>
                     </li>
 
-
                     <li className="relative" ref={dropdownRef}>
-                        <Link href="/cart">
-                            <div
-                                className="flex items-center gap-2 rounded-full p-1 border-2 border-slate-200 cursor-pointer"
-
-
-                            // onClick={handleCartClick}
-
-                            >
-                                <div className="w-10 h-10 bg-main rounded-full flex justify-center items-center">
-                                    <img
-                                        src="https://img.icons8.com/material-outlined/fafafa/shopping-cart--v1.png"
-                                        alt="shopping-cart"
-                                        className="w-5 inline-block"
-                                    />
-                                </div>
-                                <span className="pr-5 text-main font-semibold">Cart ({totalCartItems})</span>
+                        <div className="flex cursor-pointer items-center gap-2 rounded-full border-2 border-slate-300 p-1" onClick={handleCartClick}>
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-main">
+                                <ShoppingCart className="w-5 text-white" />
                             </div>
-                        </Link>
+                            <span className="pr-2 font-semibold text-main">Cart ({totalCartItems})</span>
+                        </div>
 
-                        {/* Cart Dropdown Component */}
-                        {isDropdownOpen && (
-                            <CartDropdown
-                                cartItems={cartItemsArray}
-                                totalAmount={cartTotalAmount}
-                            />
-                        )}
+                        {isDropdownOpen && <CartDropdown cartItems={cartItemsArray} totalAmount={cartTotalAmount} />}
                     </li>
-                </ul>
 
+                    {auth.user === null ? (
+                        <li>
+                            <Link href={route('login')} className="flex gap-1 font-semibold text-main transition-all hover:text-secondary">
+                                <LogIn />
+                            </Link>
+                        </li>
+                    ) : (
+                        <ProfileDropdown />
+                    )}
+                </ul>
 
                 <div className="flex lg:hidden">
                     <span>

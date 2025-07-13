@@ -5,6 +5,25 @@ export interface Auth {
     user: User;
 }
 
+export interface SharedProps {
+    cart?: {
+        items: {
+            [key: string]: {
+                id: number;
+                name: string;
+                price: number;
+                quantity: number;
+                image_url?: string;
+            };
+        };
+        totalItems: number;
+        totalAmount: number;
+    };
+    [key: string]: unknown;
+    auth: {
+        user: null;
+    };
+}
 export interface BreadcrumbItem {
     title: string;
     href: string;
@@ -20,6 +39,10 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+}
+export interface NavItemWithSubmenu extends NavItem {
+    href?: string;
+    submenu?: NavItem[] | null;
 }
 
 export interface SharedData {
@@ -39,27 +62,20 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+    [key: string]: unknown;
 }
 
 
-// Product::create([
-// 'name' => 'Air Conditioner',
-// 'slug' => 'air-conditioner',
-// 'description' => 'Energy-efficient air conditioner with smart features.',
-// 'price' => 799.99,
-// 'discount_type' => null,
-// 'discount_value' => null,
-// 'category_id' => 2, // Assuming category ID 2 exists
-// 'image' => 'images/products/air_conditioner.jpg',
-// 'is_active' => true,
-// ]);
+
 export interface CategoryType {
     id: number;
     title: string;
     slug: string;
     description?: string;
+    image: string;
     image_url: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface ReviewType {
@@ -113,6 +129,8 @@ export interface PaginationType<T> {
     to: number;
     total: number;
 }
+
+
 export interface AuthType {
     user: {
         id: number;
@@ -143,4 +161,16 @@ export interface PortfolioType {
     project_url: string;
     slug: string;
 
+}
+export interface UserType {
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
+    is_active: boolean;
+}
+export interface Column<T> {
+    header: string;
+    accessor: keyof T | ((item: T) => React.ReactNode);
+    className?: string;
 }

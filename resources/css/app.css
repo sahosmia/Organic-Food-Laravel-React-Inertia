@@ -6,7 +6,6 @@
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
-/* @custom-variant dark (&:is(.dark *)); */
 
 @theme {
     --font-sans:
@@ -43,7 +42,7 @@
     --color-primary: var(--primary);
     --color-primary-foreground: var(--primary-foreground);
 
-  
+
 
     --color-muted: var(--muted);
     --color-muted-foreground: var(--muted-foreground);
