@@ -8,14 +8,11 @@ import AppLayout from '@/layouts/app-layout';
 import { CategoryFormData } from '@/types/form';
 import { Head, useForm } from '@inertiajs/react';
 
-
-
 const CategoryCreate = () => {
     const { data, setData, post, errors, processing } = useForm<CategoryFormData>({
         title: '',
         description: '',
         image: null,
-
     });
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,14 +38,14 @@ const CategoryCreate = () => {
     return (
         <AppLayout>
             <Head title="Create Category" />
-            <div className="container mx-auto p-4">
+            <div className="container p-4 mx-auto">
                 <Heading title="Category Create" description="Fill in the details below to create a new category." />
 
                 <form className="space-y-6" onSubmit={onSubmit}>
-                    <div className='grid gap-2 w-1/2'>
+                    <div className="grid w-1/2 gap-2">
                         <Label htmlFor="name">Title</Label>
                         <Input
-                            id='title'
+                            id="title"
                             type="text"
                             name="title"
                             onChange={handleOnChange}
@@ -58,11 +55,10 @@ const CategoryCreate = () => {
                         <InputError message={errors.title} />
                     </div>
 
-
-                    <div className='grid gap-2 w-1/2'>
+                    <div className="grid w-1/2 gap-2">
                         <Label htmlFor="description">Description</Label>
                         <Textarea
-                            id='description'
+                            id="description"
                             name="description"
                             onChange={handleTextareaChange}
                             value={data.description}
@@ -71,10 +67,10 @@ const CategoryCreate = () => {
                         <InputError message={errors.description} />
                     </div>
 
-                    <div className='grid gap-2 w-1/2'>
+                    <div className="grid w-1/2 gap-2">
                         <Label htmlFor="image">Image</Label>
                         <Input
-                            id='image'
+                            id="image"
                             type="file"
                             name="image"
                             accept="image/*"

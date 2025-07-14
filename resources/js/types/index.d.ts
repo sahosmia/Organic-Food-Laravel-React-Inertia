@@ -168,6 +168,7 @@ export interface CartType {
     product_id: number;
     quantity: number;
     product: ProductType;
+    total_price: number
 }
 
 export interface UserType {

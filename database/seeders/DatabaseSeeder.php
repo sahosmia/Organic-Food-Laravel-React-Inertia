@@ -28,6 +28,12 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             BlogSeeder::class,
             PortfolioSeeder::class,
+            AddressSeeder::class,
+            CouponSeeder::class,
+            OrderSeeder::class,
+            OrderItemSeeder::class,
+            ShippingRateSeeder::class,
+
 
         ]);
     }

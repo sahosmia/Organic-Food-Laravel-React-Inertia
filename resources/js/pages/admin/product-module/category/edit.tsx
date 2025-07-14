@@ -1,22 +1,21 @@
-import Heading from '@/components/heading'
-import AppLayout from '@/layouts/app-layout'
-import React from 'react'
-import { useForm } from '@inertiajs/react'
-import { CategoryFormData } from '@/types/form'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import InputError from '@/components/input-error'
-import { CategoryType } from '@/types'
-import { Textarea } from '@/components/ui/textarea'
+import Heading from '@/components/heading';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import AppLayout from '@/layouts/app-layout';
+import { CategoryType } from '@/types';
+import { CategoryFormData } from '@/types/form';
+import { useForm } from '@inertiajs/react';
+import React from 'react';
 
 const CategoryEdit = ({ category }: { category: CategoryType }) => {
-
     const { data, setData, put, errors, processing } = useForm<CategoryFormData>({
         title: category.title,
         description: category.description ?? '',
         image: null,
-    })
+    });
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setData(e.target.name as keyof typeof data, e.target.value);
@@ -25,7 +24,6 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setData(e.target.name as keyof typeof data, e.target.value);
     };
-
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -40,17 +38,15 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
         });
     };
 
-
     return (
         <AppLayout>
-            <div className="container mx-auto p-4">
-
+            <div className="container p-4 mx-auto">
                 <Heading title="Category Edit" description="Modify the category details below." />
                 <form className="space-y-6" onSubmit={onSubmit}>
-                    <div className='grid gap-2 w-1/2'>
+                    <div className="grid w-1/2 gap-2">
                         <Label htmlFor="name">Title</Label>
                         <Input
-                            id='title'
+                            id="title"
                             type="text"
                             name="title"
                             onChange={handleOnChange}
@@ -59,10 +55,10 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
                         />
                         <InputError message={errors.title} />
                     </div>
-                    <div className='grid gap-2 w-1/2'>
+                    <div className="grid w-1/2 gap-2">
                         <Label htmlFor="description">Description</Label>
                         <Textarea
-                            id='description'
+                            id="description"
                             name="description"
                             onChange={handleTextareaChange}
                             value={data.description}
@@ -71,10 +67,10 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
                         <InputError message={errors.description} />
                     </div>
 
-                    <div className='grid gap-2 w-1/2'>
+                    <div className="grid w-1/2 gap-2">
                         <Label htmlFor="image">Image</Label>
                         <Input
-                            id='image'
+                            id="image"
                             type="file"
                             name="image"
                             accept="image/*"
@@ -83,16 +79,13 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
                         <InputError message={errors.image} />
                     </div>
 
-
-
-
                     <Button type="submit" disabled={processing} className="mt-4">
                         Update Category
                     </Button>
                 </form>
             </div>
         </AppLayout>
-    )
-}
+    );
+};
 
-export default CategoryEdit
+export default CategoryEdit;
