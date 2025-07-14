@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('additional_information')->nullable();
             $table->text('another_product_description')->nullable();
+            $table->integer('stock')->default(0);
+            $table->decimal('weight', 8,2)->default(0);
             $table->decimal('price', 10, 2);
             $table->enum('discount_type', ['percentage', 'fixed'])->nullable();
             $table->decimal('discount_value', 10, 2)->nullable();

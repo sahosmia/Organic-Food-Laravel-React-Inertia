@@ -2,9 +2,10 @@ import bannerImage from "@/assets/banner/banner-portfolio.png";
 import React from "react";
 import PageBanner from "@/components/frontend/tools/PageBanner";
 import FrontLayout from "@/layouts/front-layout";
-import { Head, useForm, usePage } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
+import { CartType } from "@/types";
 
-function Checkout({ cartItems, total }) {
+function Checkout({ cartItems, total }: { cartItems: CartType[], total: number }) {
 
     const { data, setData, post, processing, errors } = useForm({
         first_name: "",
@@ -28,8 +29,7 @@ function Checkout({ cartItems, total }) {
             <Head title="Checkout" />
             <PageBanner
                 title="Checkout"
-                image={bannerImage}
-                description="Complete your purchase by providing your shipping and payment details."
+                bg={bannerImage}
             />
             <div className="container mx-auto px-4 py-8">
 
@@ -38,7 +38,7 @@ function Checkout({ cartItems, total }) {
                         <h1 className="text-3xl  mb-4 font-bold">Shipping Details</h1>
                         <hr className="borer-4 border-indigo-500 " />
 
-                        <form>
+                        <form id="checkout-form" onSubmit={handleSubmit}>
                             <div className="space-y-12">
 
                                 <div className="border-b border-gray-900/10 pb-12">
@@ -113,17 +113,17 @@ function Checkout({ cartItems, total }) {
                                         </div>
 
                                         <div className="col-span-full">
-                                            <label htmlFor="street-address" className="block text-sm/6 font-medium text-gray-900">
+                                            <label htmlFor="address" className="block text-sm/6 font-medium text-gray-900">
                                                 Street address
                                             </label>
                                             <div className="mt-2">
                                                 <input
-                                                    id="street-address"
-                                                    name="street_address"
+                                                    id="address"
+                                                    name="address"
                                                     type="text"
                                                     autoComplete="street-address"
-                                                    value={data.street_address}
-                                                    onChange={(e) => setData("street_address", e.target.value)}
+                                                    value={data.address}
+                                                    onChange={(e) => setData("address", e.target.value)}
                                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                                 />
                                             </div>
@@ -201,7 +201,7 @@ function Checkout({ cartItems, total }) {
                     </div>
                     <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                         <h1 className="text-3xl mb-4 font-bold">Payment Details</h1>
-                        <hr className="borer-4 border-indigo-500 " />
+                        <hr className="borer-4 border-secondary " />
 
                         <div className=" p-6">
                             <h2 className="text-xl font-bold mb-4">Order Summary</h2>
@@ -266,14 +266,12 @@ function Checkout({ cartItems, total }) {
 
                         </div>
                         <button
-                            type="button"
-                            onClick={handleSubmit, ()=> console.log(data)}
+                            type="submit"
+                            form="checkout-form"
                             disabled={processing}
                             className="mt-4 w-full bg-indigo-600 text-white py-2 text-lg font-bold rounded hover:bg-indigo-700 transition"
-
                         >
                             Place Order
-
                         </button>
 
                     </div>
