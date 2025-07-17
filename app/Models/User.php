@@ -12,37 +12,24 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // appends
     protected $appends = [
         'userFormattedCart',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+
     protected function casts(): array
     {
         return [
@@ -50,16 +37,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    /**
-     * Get the cart items for the user.
-     */
+
     public function cart()
     {
         return $this->hasMany(Cart::class, 'user_id');
     }
 
-    public function getUserFormattedCartAttribute(){
-return "test";
+    public function getUserFormattedCartAttribute()
+    {
+        return "test";
     }
 
     public function getFormattedCartItemsAttribute(): array
@@ -126,18 +112,18 @@ return "test";
     /**
      * Get the user's payment methods.
      */
-    public function paymentMethods()
-    {
-        return $this->hasMany(PaymentMethod::class, 'user_id');
-    }
+    // public function paymentMethods()
+    // {
+    //     return $this->hasMany(PaymentMethod::class, 'user_id');
+    // }
     /**
      * Get the user's roles.
      */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
-            ->withTimestamps();
-    }
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
+    //         ->withTimestamps();
+    // }
     /**
      * Check if the user has a specific role.
      *

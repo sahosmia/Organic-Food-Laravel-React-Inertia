@@ -1,4 +1,5 @@
 import { CartType } from "@/types";
+import { formatPrice } from "@/utils/formatters";
 import { router } from "@inertiajs/react";
 import React from "react";
 
@@ -10,6 +11,8 @@ export function CartItem({ item }: { item: CartType }) {
             });
         }
     };
+
+    // console.log(item);
 
     const updateQuantity = (newQty: number) => {
         if (newQty < 1) {
@@ -47,7 +50,7 @@ export function CartItem({ item }: { item: CartType }) {
             <div className="col-span-2 grid grid-cols-4 gap-2 text-center items-center">
                 {/* Price */}
                 <div className="flex justify-center items-center">
-                    <span className="font-semibold text-gray-800 text-lg">${item.total_price.toFixed(2)}</span>
+                    <span className="font-semibold text-gray-800 text-lg">${formatPrice(item.product.discounted_price)}</span>
                 </div>
 
                 {/* Quantity Controls */}
@@ -76,7 +79,7 @@ export function CartItem({ item }: { item: CartType }) {
                 {/* Item Total */}
                 <div className="flex justify-center items-center">
                     <span className="font-bold text-gray-900 text-lg">
-                        ${(item.product.price * item.quantity).toFixed(2)}
+                        ${item.product.discounted_price && formatPrice(item.product.discounted_price * item.quantity)}
                     </span>
                 </div>
 

@@ -5,10 +5,13 @@ use App\Http\Controllers\Frontend\{
     CartFrontController,
     CheckoutFrontController,
     HomeFrontController,
+    OrderFrontController,
     PortfolioFrontController,
     ProductFrontController,
     ReviewFrontController,
-    TeamController
+    TeamController,
+    UserFrontController,
+    WishlistFrontController
 };
 
 use Illuminate\Support\Facades\Route;
@@ -31,9 +34,9 @@ Route::get('/blogs', [BlogFrontController::class, 'index'])->name('blogs.index')
 Route::get('/blogs/{id}', [BlogFrontController::class, 'show'])->name('blogs.show');
 
 
-Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::get('/settings', [UserController::class, 'settings'])->name('settings.index');
+Route::get('/orders', [OrderFrontController::class, 'index'])->name('orders.index');
+Route::get('/wishlist', [WishlistFrontController::class, 'index'])->name('wishlist.index');
+Route::get('/settings', [UserFrontController::class, 'settings'])->name('settings.index');
 
 Route::middleware(['auth'])->group(function () {
    // cart
@@ -50,11 +53,17 @@ Route::middleware(['auth'])->group(function () {
     // update cart
     Route::post('/cart/update', [ProductFrontController::class, 'updateCart'])->name('cart.update');
     Route::put('/cart/update/{id}', [CartFrontController::class, 'updateQuantity'])->name('cart.update');
+    Route::get('/apply-coupon', [CartFrontController::class, 'applyCoupon'])->name('apply.coupon');
+
+
+    Route::post('test', [CartFrontController::class, 'applyCoupon']);
 
     // // checkout
     // Route::get('/checkout', function () {
     //     return Inertia::render('Checkout/Index');
     // })->name('checkout.index');
+
+
 
     Route::get('/checkout', [CheckoutFrontController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutFrontController::class, 'store'])->name('checkout.store');

@@ -41,21 +41,16 @@ class HandleInertiaRequests extends Middleware
         // Cart
         $cartItems = [];
         $totalItems = 0;
-        $totalAmount = 0;
 
-        // --- Cart Logic: Only if user is authenticated ---
         if ($request->user()) {
-            // Access the formatted cart items using the accessor
-            // Laravel automatically converts snake_case accessor (get_formatted_cart_items_attribute)
-            // to camelCase (formattedCartItems) when accessed as a property.
+
             $userFormattedCart = $request->user()->formatted_cart_items;
 
             foreach ($userFormattedCart as $item) {
-                // Now $item already has 'price' and 'quantity' in the correct format
                 $totalItems += $item['quantity'];
-                $totalAmount += $item['quantity'] * $item['price'];
             }
-            $cartItems = $userFormattedCart;
+            $userWithCarts = $request->user()->load('cart.product');
+            $cartItems = $userWithCarts->cart;
         }
 
         return [
@@ -76,7 +71,6 @@ class HandleInertiaRequests extends Middleware
             'cart' => [
                 'items' => $cartItems,
                 'totalItems' => $totalItems,
-                'totalAmount' => $totalAmount,
             ],
         ];
     }
