@@ -10,7 +10,7 @@ export default () => {
     const { props } = usePage<SharedProps>();
     const { auth } = props;
 
-    console.log(auth);
+    // console.log(auth);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

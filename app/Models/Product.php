@@ -49,6 +49,7 @@ class Product extends Model
         'discount_value' => 'decimal:2',
         'additional_information' => 'array',
         'another_product_description' => 'string',
+        'discounted_price' => "decimal:2",
     ];
 
 

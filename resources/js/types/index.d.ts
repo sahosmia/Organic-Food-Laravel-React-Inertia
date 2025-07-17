@@ -6,18 +6,9 @@ export interface Auth {
 }
 
 export interface SharedProps {
-    cart?: {
-        items: {
-            [key: string]: {
-                id: number;
-                name: string;
-                price: number;
-                quantity: number;
-                image_url?: string;
-            };
-        };
+    cart: {
+        items: CartItem[];
         totalItems: number;
-        totalAmount: number;
     };
     [key: string]: unknown;
     auth: {
@@ -101,7 +92,7 @@ export interface ProductType {
     image: string;
     is_active: boolean;
     category?: CategoryType;
-    discounted_price?: number;
+    discounted_price: number;
     image_url: string;
     reviews: ReviewType[],
     another_product_description?: string;
@@ -168,7 +159,7 @@ export interface CartType {
     product_id: number;
     quantity: number;
     product: ProductType;
-    total_price: number
+    [key]: string
 }
 
 export interface UserType {
@@ -183,5 +174,6 @@ export interface Column<T> {
     accessor: keyof T | ((item: T) => React.ReactNode);
     className?: string;
 }
+
 
 
