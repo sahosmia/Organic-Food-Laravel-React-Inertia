@@ -1,21 +1,15 @@
 import CartDropdown from '@/components/frontend/kits/CartDropdown';
 import ProfileDropdown from '@/components/frontend/kits/ProfileDropdown';
+import { SharedProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { LogIn, Search, ShoppingCart } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import logo from '../../assets/logo.png';
-import { SharedProps } from '@/types';
-
-
 
 function Header() {
     const { props } = usePage<SharedProps>();
-    const { auth } = props;
-    const totalCartItems = props.cart?.totalItems || 0;
-    const cartItemsArray = Object.values(props.cart?.items || {});
-    const cartTotalAmount = props.cart?.totalAmount || 0;
-
-    // console.log(auth);
+    const { auth, cart } = props;
+    const totalCartItems = useMemo(() => cart?.totalItems || 0, [cart]);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLLIElement>(null);
@@ -89,11 +83,9 @@ function Header() {
                             News
                         </Link>
                     </li>
-
-
                 </ul>
 
-                <ul className='flex items-center gap-4'>
+                <ul className="flex items-center gap-4">
                     <li className="flex">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
                             <Search className="w-5 text-white" />
@@ -108,7 +100,7 @@ function Header() {
                             <span className="pr-2 font-semibold text-main">Cart ({totalCartItems})</span>
                         </div>
 
-                        {isDropdownOpen && <CartDropdown cartItems={cartItemsArray} totalAmount={cartTotalAmount} />}
+                        {isDropdownOpen && <CartDropdown cartItems={cart.items} />}
                     </li>
 
                     {auth.user === null ? (
