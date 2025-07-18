@@ -4,6 +4,7 @@ use App\Http\Controllers\Frontend\{
     BlogFrontController,
     CartFrontController,
     CheckoutFrontController,
+    CouponFrontController,
     HomeFrontController,
     OrderFrontController,
     PortfolioFrontController,
@@ -39,12 +40,12 @@ Route::get('/wishlist', [WishlistFrontController::class, 'index'])->name('wishli
 Route::get('/settings', [UserFrontController::class, 'settings'])->name('settings.index');
 
 Route::middleware(['auth'])->group(function () {
-   // cart
+    // cart
     Route::get('/cart', [CartFrontController::class, 'index'])->name('cart.index');
 
-     // add to cart
+    // add to cart
     Route::post('/cart/add', [CartFrontController::class, 'addToCart'])
-    ->name('cart.add');
+        ->name('cart.add');
 
     // delete from cart
     Route::get('/cart/delete/{product}', [ProductFrontController::class, 'remove'])->name('cart.remove');
@@ -53,10 +54,10 @@ Route::middleware(['auth'])->group(function () {
     // update cart
     Route::post('/cart/update', [ProductFrontController::class, 'updateCart'])->name('cart.update');
     Route::put('/cart/update/{id}', [CartFrontController::class, 'updateQuantity'])->name('cart.update');
-    Route::get('/apply-coupon', [CartFrontController::class, 'applyCoupon'])->name('apply.coupon');
+
+    Route::post('/apply-coupon', [CouponFrontController::class, 'index'])->name('apply.coupon');
 
 
-    Route::post('test', [CartFrontController::class, 'applyCoupon']);
 
     // // checkout
     // Route::get('/checkout', function () {
@@ -66,7 +67,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/checkout', [CheckoutFrontController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutFrontController::class, 'store'])->name('checkout.store');
+    Route::post('/place-order', [CheckoutFrontController::class, 'store'])->name('checkout.place-order');
 
     // order confirmation
     Route::get('/order-confirmation', function () {
@@ -74,5 +75,4 @@ Route::post('/checkout', [CheckoutFrontController::class, 'store'])->name('check
     })->name('checkout.order-confirmation');
 
     Route::post('/reviews', [ReviewFrontController::class, 'store'])->name('reviews.store');
-
 });

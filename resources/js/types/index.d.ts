@@ -177,3 +177,19 @@ export interface Column<T> {
 
 
 
+export interface CouponType {
+    id: number;
+    code: string;
+    created_at: string;
+    description: string;
+    expires_at: string;
+    is_active: number;
+    max_uses: number;
+    min_amount: string;
+    starts_at: string;
+    type: "fixed_amount" | "free_shipping" | "persentange";
+    updated_at: string;
+    uses: number;
+    value: string;
+
+}

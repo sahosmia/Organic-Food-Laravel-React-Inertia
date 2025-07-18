@@ -4,31 +4,118 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Coupon;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cookie;
+use Inertia\Inertia;
+use Illuminate\Http\Response;
+
 
 class CartFrontController extends Controller
 {
     /**
      * Display the cart page.
      */
-    public function index()
+    public function index(Request $request)
     {
         $cartItems = Cart::where('user_id', Auth::id())
             ->with('product')
             ->get();
-        $appliedCoupon = session('applied_coupon'); // সেশন থেকে প্রয়োগকৃত কুপন আনুন
+
+        $cartSubtotal = collect($cartItems)->sum(fn($item) => $item['quantity'] * $item['product']['discounted_price']);
+        $rounded_subtotal = round($cartSubtotal, 2);
+
+        $couponCode = $request->cookie('coupon');
+
+        $coupon = Coupon::where('code', $couponCode)
+            ->active()
+            ->where('expires_at', '>', now())
+            ->first();
+        // uses limit check with max_uses
 
 
 
-        return inertia('frontend/Cart', [
+
+        $discountAmount = 0;
+        $shipping = false;
+        $message = "";
+
+
+
+
+
+        $cookieToSend = null;
+
+
+        if ($coupon) {
+
+
+            switch ($coupon->type) {
+                case "fixed_amount":
+                    if ($rounded_subtotal >= $coupon->min_amount) {
+                        $discountAmount = min($coupon->value, $rounded_subtotal);
+                        // $message = "Fixed discount of $" . number_format($discountAmount, 2) . " applied.";
+                    } else {
+                        $message = "Minimum purchase amount of $" . number_format($coupon->min_amount, 2) . " not met for this coupon.";
+                    }
+                    break;
+
+                case "percentage":
+                    if ($rounded_subtotal >= $coupon->min_amount) {
+                        $discountAmount = $rounded_subtotal * ($coupon->value / 100);
+                        $discountAmount = min($discountAmount, $rounded_subtotal);
+                        // $message = "Percentage discount of " . $coupon->value . "% applied.";
+                    } else {
+                        $message = "Minimum purchase amount of $" . number_format($coupon->min_amount, 2) . " not met for this coupon.";
+                    }
+                    break;
+
+                case 'free_shipping':
+                    if ($rounded_subtotal >= $coupon->min_amount) {
+                        $shipping = true;
+                        $message = "Free shipping applied!";
+                    } else {
+                        $message = "Minimum purchase amount of $" . number_format($coupon->min_amount, 2) . " not met for free shipping.";
+                    }
+                    break;
+
+                default:
+                    $message = "Unknown coupon type.";
+                    $appDomain = Config::get('app.domain');
+                    $cookieToSend = Cookie::forget('coupon', '/', $appDomain);
+                    $coupon = null;
+                    break;
+            }
+        } else {
+            $appDomain = Config::get('app.domain');
+            $cookieToSend = Cookie::forget('coupon', '/', $appDomain); // Prepare to remove the cookie
+        }
+
+        $appliedCouponData = [
+            'coupon' => $coupon, // Will be null if coupon was invalid or forgotten
+            'discountAmount' => round($discountAmount, 2), // Ensure discount is rounded
+            'shipping' => $shipping,
+            'message' => $message,
+        ];
+
+        // Prepare the Inertia response
+        $inertiaResponse = Inertia::render('frontend/Cart', [
             'cartItems' => $cartItems,
-            'initialCouponData' => $appliedCoupon, // কুপনের ডেটা ফ্রন্টএন্ডে পাঠান
-
+            'appliedCoupon' => $appliedCouponData,
         ]);
+
+        // Attach the cookie if one was prepared for sending (e.g., to be forgotten)
+        if ($cookieToSend) {
+            /** @var \Illuminate\Http\Response $httpResponse */
+            $httpResponse = $inertiaResponse->toResponse($request);
+            return $httpResponse->withCookie($cookieToSend);
+        }
+
+        // Otherwise, return the Inertia response directly
+        return $inertiaResponse;
     }
 
     /**
@@ -85,95 +172,5 @@ class CartFrontController extends Controller
     }
 
 
-    public function applyCoupon(Request $request)
-    {
-        $request->validate([
-            'code' => 'required|string|max:255',
-        ]);
 
-        $couponCode = $request->code;
-        $cartItems = Cart::where('user_id', Auth::id())
-            ->with('product')
-            ->get();
-
-
-
-        $discountAmount = 0;
-        $isFreeShipping = false;
-        $message = '';
-
-        // Find Coupon form model
-        $coupon = Coupon::where('code', $couponCode)
-            ->where('is_active', true)
-            ->where('expires_at', '>', now())
-            ->first();
-
-
-
-        if (!$coupon) {
-            // return redirect()->back()->withErrors(['coupon_code' => 'Invalid or expired coupon.'])->with([
-            //     'flash' => [
-            //         'coupon_result' => [
-            //             'discount_amount' => 0,
-            //             'is_free_shipping' => false,
-            //             'message' => 'Invalid or expired coupon.',
-            //         ],
-            //     ],
-            // ]);
-
-            return response()->json([
-                'code' => $couponCode,
-                'message' => 'hello',
-            "request" => $request->code,
-                "coupon" => $coupon,
-                'coupon_result' => [
-                    'discount_amount' => 0,
-                    'is_free_shipping' => false,
-                    'message' => 'Invalid or expired coupon.',
-                ],
-            ]);
-        }
-
-                $cartSubtotal = collect($cartItems)->sum(fn($item) => $item['quantity'] * $item['product']['discounted_price']);
-
-
-
-
-        if ($coupon->type === 'fixed_amount') {
-            $discountAmount = min($coupon->value, $cartSubtotal); // সাবটোটালের বেশি ডিসকাউন্ট হবে না
-            $message = "Fixed discount of $" . number_format($discountAmount, 2) . " applied.";
-        } elseif ($coupon->type === 'percentage') {
-            $discountAmount = ($cartSubtotal * $coupon->value) / 100;
-            $discountAmount = min($discountAmount, $coupon->max_discount_amount ?? $discountAmount); // যদি সর্বোচ্চ ডিসকাউন্ট থাকে
-            $message = "Percentage discount of " . $coupon->value . "% applied.";
-        } elseif ($coupon->type === 'free_shipping') {
-            $isFreeShipping = true;
-            $message = "Free shipping applied!";
-        }
-
-        // কুপনের ব্যবহার সীমা চেক করুন (ঐচ্ছিক)
-        // if ($coupon->usage_limit && $coupon->usage_count >= $coupon->usage_limit) {
-        //     // কুপন ব্যবহার সীমা অতিক্রম করেছে
-        // }
-
-        // কুপন সেশনে বা ডেটাবেজে সংরক্ষণ করুন যাতে চেকআউটে ব্যবহার করা যায়
-        session()->put('applied_coupon', [
-            'code' => $coupon->code,
-            'discount_amount' => $discountAmount,
-            'is_free_shipping' => $isFreeShipping,
-        ]);
-
-        return response()->json([
-            'cartSubtotal'=> $cartSubtotal,
-            'code' => $request->couponCode,
-            'message' => $message,
-            "request" => $request->code,
-            "coupon" => $coupon,
-            'coupon_result' => [
-                'discount_amount' => $discountAmount,
-                'is_free_shipping' => $isFreeShipping,
-                'message' => $message,
-            ],
-        ]);
-    }
 }

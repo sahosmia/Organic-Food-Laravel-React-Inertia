@@ -2,7 +2,7 @@ import banner from '@/assets/banner/banner-portfolio.png';
 import { CartItem } from '@/components/frontend/CartItem';
 import PageBanner from '@/components/frontend/tools/PageBanner';
 import FrontLayout from '@/layouts/front-layout';
-import { CartType } from '@/types';
+import { CartType, CouponType } from '@/types';
 import api from '@/utils/axios';
 import { cartSubtotal } from '@/utils/formatters';
 import { Head, router } from '@inertiajs/react';
@@ -13,20 +13,27 @@ import React, { useState } from 'react';
 
 
 
-function Cart({ cartItems }: { cartItems: CartType[], }) {
+function Cart({ cartItems, appliedCoupon }: { cartItems: CartType[], appliedCoupon: { coupon: CouponType, discountAmount: number, shipping: boolean, message: string, errorMessage: string } }) {
 
-    const [isFreeShipping, setIsFreeShipping] = useState(false);
-    const [couponDiscount, setCouponDiscount] = useState(0);
-    const [couponCode, setCouponCode] = useState('');
-    const [couponError, setCouponError] = useState<string | null>(null);
+
+    const { coupon, discountAmount, shipping, message, errorMessage } = appliedCoupon;
+    // console.log(coupon);
+
+    const [isFreeShipping, setIsFreeShipping] = useState(shipping || false);
+    const [couponDiscount, setCouponDiscount] = useState(discountAmount || 0);
+    const [couponCode, setCouponCode] = useState(coupon?.code || '');
+    const [couponError, setCouponError] = useState<string | null>(errorMessage || null);
     const [loading, setLoading] = useState(false)
-    const [couponSuccess, setCouponSuccess] = useState<string | null>(null)
+    const [couponSuccess, setCouponSuccess] = useState<string | null>(message || null)
+
 
 
     const defaultShippingCost = 5.00;
+
     const shippingCost = isFreeShipping ? 0 : defaultShippingCost;
 
     const finalTotal = (cartSubtotal(cartItems) - couponDiscount + shippingCost);
+    console.log(appliedCoupon, couponCode);
 
     // Function to handle coupon application for freeship, discount, fixed_amount logic if else
     const applyCoupon = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,6 +50,7 @@ function Cart({ cartItems }: { cartItems: CartType[], }) {
             return;
         }
 
+
         try {
             const res = await api.post('/apply-coupon', { code: couponCode })
             const resData = res.data;
@@ -56,7 +64,9 @@ function Cart({ cartItems }: { cartItems: CartType[], }) {
             setLoading(false);
             setIsFreeShipping(resData.coupon_result.is_free_shipping);
             setCouponDiscount(resData.coupon_result.discount_amount)
-            setCouponSuccess(res.data.message || 'Coupon Applied!')
+
+                setCouponSuccess(resData.coupon_result.message || 'Coupon Applied!')
+           
         } catch (err) {
             const error = err as AxiosError<{ message?: string }>;
 
@@ -138,9 +148,9 @@ function Cart({ cartItems }: { cartItems: CartType[], }) {
                                 </div>
                             </form>
                             {couponError && <p className="text-red-500 text-xs mt-1">{couponError}</p>}
-                            {couponDiscount > 0 && !couponError && (
+                            {/* {couponDiscount > 0 && !couponError && (
                                 <p className="text-green-600 text-xs mt-1">Coupon applied!</p>
-                            )}
+                            )} */}
                             {couponSuccess && <p className="text-green-500 text-xs mt-1">{couponSuccess}</p>}
 
                         </div>

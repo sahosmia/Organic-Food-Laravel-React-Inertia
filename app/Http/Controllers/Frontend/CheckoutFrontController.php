@@ -13,6 +13,7 @@ class CheckoutFrontController extends Controller{
 
   public function index()
     {
+        
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
 
         $total = $cartItems->sum(function ($item) {
@@ -24,24 +25,35 @@ class CheckoutFrontController extends Controller{
             'total' => $total,
         ]);
     }
+
+
+    // checkout place order
     public function store(Request $request)
     {
 
      $data = $request->validate([
-        'first_name' => 'required|string|max:100',
+        'name' => 'required|string|max:100',
         'last_name' => 'required|string|max:100',
         'email' => 'required|email|max:255',
         'phone_number' => 'required|string|max:20',
         'address' => 'required|string|max:255',
-        'city' => 'required|string|max:100',
-        'postal_code' => 'required|string|max:20',
-        'order_notes' => 'nullable|string',
-        'delivery_charge' => 'required|numeric|min:0',
+        // 'city' => 'required|string|max:100',
+        // 'postal_code' => 'required|string|max:20',
+        // 'order_notes' => 'nullable|string',
+        // 'delivery_charge' => 'required|numeric|min:0',
     ]);
 
-    // Store order logic...
-    // For example:
-    // $order = Order::create([...]);
+ // store order
+
+ // store order item
+ // delete cart
+ // store address
+ // delete coupon
+ // incriment coupon uses
+
+ return $data;
+
+ die();
 
     // Clear user's cart
     Cart::where('user_id', Auth::id())->delete();
