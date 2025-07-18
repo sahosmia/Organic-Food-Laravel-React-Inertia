@@ -8,8 +8,7 @@ import { CartType } from "@/types";
 function Checkout({ cartItems, total }: { cartItems: CartType[], total: number }) {
 
     const { data, setData, post, processing, errors } = useForm({
-        first_name: "",
-        last_name: "",
+        name: "",
         email: "",
         phone_number: "",
         address: "",
@@ -21,8 +20,10 @@ function Checkout({ cartItems, total }: { cartItems: CartType[], total: number }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post("/checkout");
+        post("/place-order");
     };
+
+
 
     return (
         <FrontLayout>
@@ -55,31 +56,19 @@ function Checkout({ cartItems, total }: { cartItems: CartType[], total: number }
                                                     name="first_name"
                                                     type="text"
                                                     autoComplete="given-name"
-                                                    value={data.first_name}
-                                                    onChange={(e) => setData("first_name", e.target.value)}
+                                                    value={data.name}
+                                                    onChange={(e) => setData("name", e.target.value)}
                                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                                 />
                                             </div>
+                                            {errors.name && (
+                                                <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                                            )}
                                         </div>
+
+
 
                                         <div className="sm:col-span-3">
-                                            <label htmlFor="last-name" className="block text-sm/6 font-medium text-gray-900">
-                                                Last name
-                                            </label>
-                                            <div className="mt-2">
-                                                <input
-                                                    id="last-name"
-                                                    name="last_name"
-                                                    type="text"
-                                                    autoComplete="family-name"
-                                                    value={data.last_name}
-                                                    onChange={(e) => setData("last_name", e.target.value)}
-                                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-4">
                                             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                                                 Phone number
                                             </label>
@@ -95,7 +84,7 @@ function Checkout({ cartItems, total }: { cartItems: CartType[], total: number }
                                                 />
                                             </div>
                                         </div>
-                                        <div className="sm:col-span-4">
+                                        <div className="sm:col-span-3">
                                             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                                                 Email address
                                             </label>
@@ -129,7 +118,7 @@ function Checkout({ cartItems, total }: { cartItems: CartType[], total: number }
                                             </div>
                                         </div>
 
-                                        <div className="sm:col-span-3 sm:col-start-1">
+                                        <div className="sm:col-span-3 ">
                                             <label htmlFor="city" className="block text-sm/6 font-medium text-gray-900">
                                                 City
                                             </label>
