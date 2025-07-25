@@ -3,7 +3,7 @@ import { PaginationType, UserType } from '@/types';
 import { Head } from '@inertiajs/react';
 
 import CommonTable from '@/components/admin/CommonTable';
-import Heading from '@/components/heading';
+import Heading from '@/components/admin/heading';
 import { useTableFilters } from '@/hooks/useTableFilters';
 import { useEffect } from 'react';
 import { columns } from './columns';

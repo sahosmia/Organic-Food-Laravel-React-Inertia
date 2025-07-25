@@ -1,19 +1,18 @@
 <?php
 
-use App\Http\Controllers\Frontend\{
-    BlogFrontController,
-    CartFrontController,
-    CheckoutFrontController,
-    CouponFrontController,
-    HomeFrontController,
-    OrderFrontController,
-    PortfolioFrontController,
-    ProductFrontController,
-    ReviewFrontController,
-    TeamController,
-    UserFrontController,
-    WishlistFrontController
-};
+use App\Http\Controllers\Frontend\BlogFrontController;
+
+use App\Http\Controllers\Frontend\CartFrontController;
+use App\Http\Controllers\Frontend\CheckoutFrontController;
+use App\Http\Controllers\Frontend\CouponFrontController;
+use App\Http\Controllers\Frontend\HomeFrontController;
+use App\Http\Controllers\Frontend\OrderFrontController;
+use App\Http\Controllers\Frontend\PortfolioFrontController;
+use App\Http\Controllers\Frontend\ProductFrontController;
+use App\Http\Controllers\Frontend\ReviewFrontController;
+use App\Http\Controllers\Frontend\TeamController;
+use App\Http\Controllers\Frontend\UserFrontController;
+use App\Http\Controllers\Frontend\WishlistFrontController;
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;

@@ -18,8 +18,8 @@ class CouponSeeder extends Seeder
             [
                 'code' => 'SUMMER25',
                 'type' => 'percentage',
-                'value' => 25.00,
-                'min_amount' => 500.00,
+                'value' => 25,
+                'min_amount' => 500,
                 'max_uses' => 100,
                 'uses' => 0,
                 'starts_at' => Carbon::now()->subDays(7),
@@ -30,8 +30,8 @@ class CouponSeeder extends Seeder
             [
                 'code' => 'FLAT100',
                 'type' => 'fixed_amount',
-                'value' => 100.00,
-                'min_amount' => 1000.00,
+                'value' => 100,
+                'min_amount' => 1000,
                 'max_uses' => 50,
                 'uses' => 0,
                 'starts_at' => Carbon::now()->subDays(15),
@@ -42,8 +42,8 @@ class CouponSeeder extends Seeder
             [
                 'code' => 'FREESHIP',
                 'type' => 'free_shipping',
-                'value' => 0.00,
-                'min_amount' => 0.00,
+                'value' => 0,
+                'min_amount' => 0,
                 'max_uses' => null,
                 'uses' => 0,
                 'starts_at' => Carbon::now()->subMonth(1),
@@ -54,8 +54,8 @@ class CouponSeeder extends Seeder
             [
                 'code' => 'EXPIRED10',
                 'type' => 'percentage',
-                'value' => 10.00,
-                'min_amount' => 200.00,
+                'value' => 10,
+                'min_amount' => 200,
                 'max_uses' => 10,
                 'uses' => 10,
                 'starts_at' => Carbon::now()->subMonths(2),

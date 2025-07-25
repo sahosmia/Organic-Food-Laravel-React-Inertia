@@ -17,12 +17,14 @@ interface CommonTableProps<T> {
     data: PaginationType<T>;
     columns: Column<T>[];
     create_route: string;
+    routeName: string;
 }
 
 const CommonTable = <T extends { id: number }>({
     data,
     columns,
-    create_route
+    create_route,
+    routeName
 }: CommonTableProps<T>) => {
 
     const {
@@ -37,7 +39,7 @@ const CommonTable = <T extends { id: number }>({
         handleSelectAllItems,
     } = useTableFilters({
         data: data,
-        routeName: 'admin.product_m.categories.index',
+        routeName: routeName,
     });
 
     useEffect(() => {

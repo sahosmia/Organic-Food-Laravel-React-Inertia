@@ -6,6 +6,7 @@ use App\Traits\HasSlug;
 use App\Traits\IsActive;
 use App\Traits\SlugAsRouteKey;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Category extends Model
 {
@@ -30,7 +31,7 @@ class Category extends Model
     // Relationships List Here ===========================================
     public function products()
     {
-        return $this->hasMany(Product::class); 
+        return $this->hasMany(Product::class);
     }
 
 
@@ -40,9 +41,9 @@ class Category extends Model
 
     public function getImageUrlAttribute()
     {
-        if ($this->image) {
-            return asset('storage/categories/' . $this->image);
-        }
+         if ($this->image && Storage::disk('public')->exists('categories/' . $this->image)) {
+        return asset('storage/categories/' . $this->image);
+    }
         return asset('images/default_category.jpg');
     }
 

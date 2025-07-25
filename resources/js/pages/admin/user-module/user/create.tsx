@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import Heading from '@/components/admin/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
