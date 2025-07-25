@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import Heading from '@/components/admin/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import AppLayout from '@/layouts/app-layout';
 import { CategoryFormData } from '@/types/form';
 import { Head, useForm } from '@inertiajs/react';
 
+
 const CategoryCreate = () => {
     const { data, setData, post, errors, processing } = useForm<CategoryFormData>({
         title: '',
@@ -15,21 +16,22 @@ const CategoryCreate = () => {
         image: null,
     });
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setData(e.target.name as keyof typeof data, e.target.value);
+
     };
 
-    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setData(e.target.name as keyof typeof data, e.target.value);
+
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData('image', e.target.files?.[0] || null);
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         post(route('admin.product_m.categories.store'), {
             preserveScroll: true,
-            onSuccess: () => {
-                // Handle success, e.g., redirect or show a success message
-            },
+
             onError: (errors) => {
                 console.error(errors);
             },
@@ -43,7 +45,7 @@ const CategoryCreate = () => {
 
                 <form className="space-y-6" onSubmit={onSubmit}>
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="name">Title</Label>
+                        <Label htmlFor="title">Title</Label>
                         <Input
                             id="title"
                             type="text"
@@ -60,7 +62,7 @@ const CategoryCreate = () => {
                         <Textarea
                             id="description"
                             name="description"
-                            onChange={handleTextareaChange}
+                            onChange={handleOnChange}
                             value={data.description}
                             placeholder="Enter your category description"
                         />
@@ -74,8 +76,7 @@ const CategoryCreate = () => {
                             type="file"
                             name="image"
                             accept="image/*"
-                            onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
-                        />
+                            onChange={handleFileChange} />
                         <InputError message={errors.image} />
                     </div>
 

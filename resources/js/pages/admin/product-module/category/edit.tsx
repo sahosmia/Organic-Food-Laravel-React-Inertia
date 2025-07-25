@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import Heading from '@/components/admin/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,31 +7,36 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { CategoryType } from '@/types';
 import { CategoryFormData } from '@/types/form';
+import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
-import React from 'react';
+import React, { FormEventHandler } from 'react';
 
 const CategoryEdit = ({ category }: { category: CategoryType }) => {
-    const { data, setData, put, errors, processing } = useForm<CategoryFormData>({
-        title: category.title,
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm<Required<CategoryFormData>>({
+        title: category.title || '',
         description: category.description ?? '',
         image: null,
+        _method: 'PUT',
     });
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setData(e.target.name as keyof typeof data, e.target.value);
     };
 
-    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setData(e.target.name as keyof typeof data, e.target.value);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData('image', e.target.files?.[0] || null);
     };
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+
+    const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route('admin.product_m.categories.update', { category: category.slug }), {
+        console.log(data);
+
+        post(route('admin.product_m.categories.update', { category: category.slug }), {
             preserveScroll: true,
-            onSuccess: () => {
-                // Handle success, e.g., redirect or show a success message
-            },
+            forceFormData: true,
             onError: (errors) => {
                 console.error(errors);
             },
@@ -44,7 +49,7 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
                 <Heading title="Category Edit" description="Modify the category details below." />
                 <form className="space-y-6" onSubmit={onSubmit}>
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="name">Title</Label>
+                        <Label htmlFor="title">Title</Label>
                         <Input
                             id="title"
                             type="text"
@@ -60,7 +65,7 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
                         <Textarea
                             id="description"
                             name="description"
-                            onChange={handleTextareaChange}
+                            onChange={handleOnChange}
                             value={data.description}
                             placeholder="Enter your category description"
                         />
@@ -74,14 +79,24 @@ const CategoryEdit = ({ category }: { category: CategoryType }) => {
                             type="file"
                             name="image"
                             accept="image/*"
-                            onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
+                            onChange={handleFileChange}
                         />
                         <InputError message={errors.image} />
                     </div>
 
                     <Button type="submit" disabled={processing} className="mt-4">
-                        Update Category
+                        {processing ? 'Updating...' : 'Update Category'}
                     </Button>
+
+                    <Transition
+                        show={recentlySuccessful}
+                        enter="transition ease-in-out"
+                        enterFrom="opacity-0"
+                        leave="transition ease-in-out"
+                        leaveTo="opacity-0"
+                    >
+                        <p className="text-sm text-neutral-600">Saved</p>
+                    </Transition>
                 </form>
             </div>
         </AppLayout>

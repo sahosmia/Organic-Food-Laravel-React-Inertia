@@ -16,12 +16,12 @@ return new class extends Migration
 
             $table->string('code')->unique();
             $table->enum('type', ['percentage', 'fixed_amount', 'free_shipping']);
-            $table->decimal('value')->default(0);
-            $table->decimal('min_amount')->default(0);
+            $table->integer('value')->nullable();
+            $table->integer('min_amount')->nulable();
             $table->integer('max_uses')->nullable();
             $table->integer('uses')->default(0);
-            $table->timestamp('starts_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->date('starts_at')->nullable();
+            $table->date('expires_at')->nullable();
             $table->text('description')->nullable();
 
             $table->boolean('is_active')->default(true);

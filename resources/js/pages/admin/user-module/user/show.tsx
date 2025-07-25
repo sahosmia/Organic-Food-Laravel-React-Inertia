@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import Heading from '@/components/admin/heading';
 import { Card } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { UserType } from '@/types';

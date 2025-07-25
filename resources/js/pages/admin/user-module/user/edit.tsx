@@ -1,4 +1,4 @@
-import Heading from '@/components/heading'
+import Heading from '@/components/admin/heading'
 import AppLayout from '@/layouts/app-layout'
 import React from 'react'
 import { useForm } from '@inertiajs/react'

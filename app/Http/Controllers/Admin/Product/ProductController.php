@@ -10,7 +10,7 @@ class ProductController extends Controller {
 
     public function index(Request $request){
         $products = Product::with('category')->get();
-        return Inertia::render('Admin/product/index', [
+        return Inertia::render('admin/product-module/product/index', [
             'products' => $products,
         ]);
     }

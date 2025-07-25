@@ -1,15 +1,17 @@
 <?php
+
 namespace App\Http\Controllers\Admin\Product;
 
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreCategoryRequest;
-use App\Http\Requests\Product\UpdateCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class CategoryController extends Controller {
+class CategoryController extends Controller
+{
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
@@ -37,22 +39,17 @@ class CategoryController extends Controller {
     // Store
     public function store(StoreCategoryRequest $request)
     {
+        $validatedData = $request->validated();
 
-        $validator = $request->validated();
-
-        // Image Upload
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('categories', 'public');
-            $imageName = basename($imagePath);
-            $validator['image'] = $imageName;
+            $validatedData['image'] = basename($imagePath);
         } else {
-            $validator['image'] = null;
+            $validatedData['image'] = null;
         }
 
-        // create
-        Category::create($validator);
+        Category::create($validatedData);
 
-        // return with message
         return redirect()->route('admin.product_m.categories.index')->with('success', 'Category created successfully.');
     }
 
@@ -72,38 +69,47 @@ class CategoryController extends Controller {
             'category' => $category,
         ]);
     }
+    // $validatedData = $request->validate(
+    //     [
+    //         'title' => '',
+    //         'description' => ['nullable', ],
+    //         'image' => ['nullable'],
+    //     ]
+    // );
+
+    // dd($category);
 
     // Update
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $validator = $request->validated();
+        $validatedData = $request->validated();
 
-        // Image update
+        // ===
         $oldImageName = $category->image;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('categories', 'public');
-            $imageName = basename($imagePath);
-            $validator['image'] = $imageName;
+            if ($imagePath) {
+                $validatedData['image'] = basename($imagePath);
 
-            if ($oldImageName) {
-                Storage::disk('public')->delete('categories/' . $oldImageName);
+                if ($oldImageName && Storage::disk('public')->exists('categories/' . $oldImageName)) {
+                    Storage::disk('public')->delete('categories/' . $oldImageName);
+                }
             }
         }
 
-        // update
-        $category->update($request->all());
+        $category->update($validatedData);
 
-        // return with message
         return redirect()->route('admin.product_m.categories.index')->with('success', 'Category updated successfully.');
     }
 
-    
+
     public function destroy(Category $category)
     {
+        if ($category->image && Storage::disk('public')->exists('categories/' . $category->image)) {
+            Storage::disk('public')->delete('categories/' . $category->image);
+        }
+
         $category->delete();
         return redirect()->route('admin.product_m.categories.index')->with('success', 'Category deleted successfully.');
     }
-
 }
-
-
