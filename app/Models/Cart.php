@@ -18,10 +18,8 @@ class Cart extends Model
     ];
 
      protected $casts = [
-        'quantity' => 'string',
+        'quantity' => 'integer',
     ];
-
-
 
     public function product()
     {
@@ -33,17 +31,14 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
 
-
-
     public function getTotalPriceAttribute()
     {
-        return $this->product->price * $this->quantity;
+        return $this->product->discounted_price * $this->quantity;
     }
 
     public function scopeForUser($query, $userId)

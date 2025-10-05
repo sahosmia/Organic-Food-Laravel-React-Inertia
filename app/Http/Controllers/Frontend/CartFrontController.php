@@ -30,55 +30,33 @@ class CartFrontController extends Controller
 
         $couponCode = $request->cookie('coupon');
 
-        $coupon = Coupon::where('code', $couponCode)
+        $coupon = Coupon::where('coupon_code', $couponCode)
             ->active()
-            ->where('expires_at', '>', now())
+            ->where('end_date', '>', now())
             ->first();
-        // uses limit check with max_uses
-
-
-
 
         $discountAmount = 0;
         $shipping = false;
         $message = "";
 
-
-
-
-
         $cookieToSend = null;
 
-
         if ($coupon) {
-
-
-            switch ($coupon->type) {
+            switch ($coupon->discount_type) {
                 case "fixed_amount":
-                    if ($rounded_subtotal >= $coupon->min_amount) {
-                        $discountAmount = min($coupon->value, $rounded_subtotal);
-                        // $message = "Fixed discount of $" . number_format($discountAmount, 2) . " applied.";
+                    if ($rounded_subtotal >= $coupon->min_order_amount) {
+                        $discountAmount = min($coupon->discount_value, $rounded_subtotal);
                     } else {
-                        $message = "Minimum purchase amount of $" . number_format($coupon->min_amount, 2) . " not met for this coupon.";
+                        $message = "Minimum purchase amount of $" . number_format($coupon->min_order_amount, 2) . " not met for this coupon.";
                     }
                     break;
 
                 case "percentage":
-                    if ($rounded_subtotal >= $coupon->min_amount) {
-                        $discountAmount = $rounded_subtotal * ($coupon->value / 100);
+                    if ($rounded_subtotal >= $coupon->min_order_amount) {
+                        $discountAmount = $rounded_subtotal * ($coupon->discount_value / 100);
                         $discountAmount = min($discountAmount, $rounded_subtotal);
-                        // $message = "Percentage discount of " . $coupon->value . "% applied.";
                     } else {
-                        $message = "Minimum purchase amount of $" . number_format($coupon->min_amount, 2) . " not met for this coupon.";
-                    }
-                    break;
-
-                case 'free_shipping':
-                    if ($rounded_subtotal >= $coupon->min_amount) {
-                        $shipping = true;
-                        $message = "Free shipping applied!";
-                    } else {
-                        $message = "Minimum purchase amount of $" . number_format($coupon->min_amount, 2) . " not met for free shipping.";
+                        $message = "Minimum purchase amount of $" . number_format($coupon->min_order_amount, 2) . " not met for this coupon.";
                     }
                     break;
 
@@ -91,12 +69,12 @@ class CartFrontController extends Controller
             }
         } else {
             $appDomain = Config::get('app.domain');
-            $cookieToSend = Cookie::forget('coupon', '/', $appDomain); // Prepare to remove the cookie
+            $cookieToSend = Cookie::forget('coupon', '/', $appDomain);
         }
 
         $appliedCouponData = [
-            'coupon' => $coupon, // Will be null if coupon was invalid or forgotten
-            'discountAmount' => round($discountAmount, 2), // Ensure discount is rounded
+            'coupon' => $coupon,
+            'discountAmount' => round($discountAmount, 2),
             'shipping' => $shipping,
             'message' => $message,
         ];

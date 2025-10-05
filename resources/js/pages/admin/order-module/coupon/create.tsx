@@ -36,13 +36,13 @@ const formatDateTimeForInput = (isoString: string | null): string => {
 
 const CouponCreate = () => {
     const { data, setData, post, errors, processing } = useForm<CouponFormData>({
-        code: '',
-        type: 'percentage',
-        value: '',
-        min_amount: '',
-        max_uses: '',
-        starts_at: formatDateTimeForInput(getCurrentDateTime()),
-        expires_at: '',
+        coupon_code: '',
+        discount_type: 'percentage',
+        discount_value: '',
+        min_order_amount: '',
+        usage_limit: '',
+        start_date: formatDateTimeForInput(getCurrentDateTime()),
+        end_date: '',
         description: '',
         is_active: true,
     });
@@ -51,7 +51,7 @@ const CouponCreate = () => {
         const { name, value } = e.target;
 
         setData(name as keyof typeof data, value);
-        if (['value', 'min_amount', 'max_uses'].includes(name)) {
+        if (['discount_value', 'min_order_amount', 'usage_limit'].includes(name)) {
             setData(name as keyof typeof data, value === '' ? '' : Number(e.target.value));
         } else {
             setData(name as keyof typeof data, value);
@@ -64,7 +64,7 @@ const CouponCreate = () => {
         post(route('admin.order_m.coupons.store'), {
             preserveScroll: true,
             onError: (formErrors) => {
-                console.error("Coupon update validation errors:", formErrors);
+                console.error("Coupon creation validation errors:", formErrors);
             },
         });
     };
@@ -82,108 +82,98 @@ const CouponCreate = () => {
             <div className="container p-4 mx-auto">
                 <Heading title="Coupon Create" description="Set up a new discount coupon." />
                 <form className="space-y-6" onSubmit={onSubmit}>
-                    {/* Code */}
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="code">Coupon Code</Label>
+                        <Label htmlFor="coupon_code">Coupon Code</Label>
                         <Input
-                            id="code"
-                            name="code"
-                            value={data.code}
+                            id="coupon_code"
+                            name="coupon_code"
+                            value={data.coupon_code}
                             onChange={handleChange}
                             placeholder="e.g., BLACKFRIDAY20"
-
                         />
-                        <InputError message={errors.code} />
+                        <InputError message={errors.coupon_code} />
                     </div>
 
-                    {/* Type */}
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="type">Coupon Type</Label>
-                        <Select value={data.type} onValueChange={(value) => {
-                            setData('type', value as CouponFormData['type']);
-                            if (value === 'free_shipping') setData('value', '');
-                        }}>
-                            <SelectTrigger id="type">
+                        <Label htmlFor="discount_type">Coupon Type</Label>
+                        <Select
+                            value={data.discount_type}
+                            onValueChange={(value) => {
+                                setData('discount_type', value as CouponFormData['discount_type']);
+                            }}
+                        >
+                            <SelectTrigger id="discount_type">
                                 <SelectValue placeholder="Select coupon type" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="percentage">Percentage</SelectItem>
                                 <SelectItem value="fixed_amount">Fixed Amount</SelectItem>
-                                <SelectItem value="free_shipping">Free Shipping</SelectItem>
                             </SelectContent>
                         </Select>
-                        <InputError message={errors.type} />
+                        <InputError message={errors.discount_type} />
                     </div>
 
-                    {/* Value */}
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="value">Value</Label>
+                        <Label htmlFor="discount_value">Value</Label>
                         <Input
-                            id="value"
-                            name="value"
+                            id="discount_value"
+                            name="discount_value"
                             type="number"
-                            value={data.value ?? ''}
+                            value={data.discount_value ?? ''}
                             onChange={handleChange}
-                            disabled={data.type === 'free_shipping'}
-                            placeholder={data.type === 'percentage' ? 'e.g., 15 (for 15%)' : 'e.g., 10 (for $10)'}
+                            placeholder={data.discount_type === 'percentage' ? 'e.g., 15 (for 15%)' : 'e.g., 10 (for $10)'}
                         />
-                        <InputError message={errors.value} />
+                        <InputError message={errors.discount_value} />
                     </div>
 
-                    {/* Min Amount */}
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="min_amount">Minimum Amount (Optional)</Label>
+                        <Label htmlFor="min_order_amount">Minimum Amount (Optional)</Label>
                         <Input
-                            id="min_amount"
-                            name="min_amount"
+                            id="min_order_amount"
+                            name="min_order_amount"
                             type="number"
-                            value={data.min_amount ?? ''}
+                            value={data.min_order_amount ?? ''}
                             onChange={handleChange}
                             placeholder="e.g., 50 (minimum order value)"
-
                         />
-                        <InputError message={errors.min_amount} />
+                        <InputError message={errors.min_order_amount} />
                     </div>
 
-                    {/* Max Uses */}
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="max_uses">Max Uses</Label>
+                        <Label htmlFor="usage_limit">Max Uses</Label>
                         <Input
-                            id="max_uses"
-                            name="max_uses"
+                            id="usage_limit"
+                            name="usage_limit"
                             type="number"
-                            value={data.max_uses ?? ''}
+                            value={data.usage_limit ?? ''}
                             onChange={handleChange}
                             placeholder="e.g., 100 (total times coupon can be used)"
-
                         />
-                        <InputError message={errors.max_uses} />
+                        <InputError message={errors.usage_limit} />
                     </div>
 
-                    {/* Starts At */}
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="starts_at">Starts At</Label>
+                        <Label htmlFor="start_date">Starts At</Label>
                         <Input
-                            id="starts_at"
-                            name="starts_at"
+                            id="start_date"
+                            name="start_date"
                             type="date"
-                            value={data.starts_at}
+                            value={data.start_date}
                             onChange={handleChange}
                         />
-                        <InputError message={errors.starts_at} />
+                        <InputError message={errors.start_date} />
                     </div>
 
-                    {/* Expires At */}
                     <div className="grid w-1/2 gap-2">
-                        <Label htmlFor="expires_at">Expires At (Optional)</Label>
+                        <Label htmlFor="end_date">Expires At (Optional)</Label>
                         <Input
-                            id="expires_at"
-                            name="expires_at"
+                            id="end_date"
+                            name="end_date"
                             type="date"
-                            value={data.expires_at || ''}
+                            value={data.end_date || ''}
                             onChange={handleChange}
                         />
-                        <InputError message={errors.expires_at} />
+                        <InputError message={errors.end_date} />
                     </div>
 
                     {/* Description */}

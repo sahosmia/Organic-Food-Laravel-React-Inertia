@@ -10,24 +10,21 @@ import { CheckCircle, FileText, MoreHorizontal, SquarePen, Trash2, XCircle } fro
 const columns: Column<CouponType>[] = [
     {
         header: 'Code',
-        accessor: 'code', // Direct accessor for the code
+        accessor: 'coupon_code',
         className: 'w-2/12',
     },
     {
         header: 'Type',
-        accessor: 'type',
+        accessor: 'discount_type',
         className: 'w-1/12',
     },
     {
         header: 'Value',
-        // Custom cell rendering based on coupon type
         accessor: (item) => {
-            if (item.type === 'percentage') {
-                return `${item.value}%`;
-            } else if (item.type === 'fixed_amount') {
-                return `$${item.value}`;
-            } else if (item.type === 'free_shipping') {
-                return 'Free Shipping';
+            if (item.discount_type === 'percentage') {
+                return `${item.discount_value}%`;
+            } else if (item.discount_type === 'fixed_amount') {
+                return `$${item.discount_value}`;
             }
             return 'N/A';
         },
@@ -36,7 +33,7 @@ const columns: Column<CouponType>[] = [
     {
         header: 'Min. Amount',
         accessor: (item) => {
-            const minAmount = parseFloat(item.min_amount?.toString() || '0');
+            const minAmount = parseFloat(item.min_order_amount?.toString() || '0');
             return minAmount > 0 ? `$${minAmount.toFixed(2)}` : 'None';
         },
         className: 'w-1/12',
@@ -44,25 +41,24 @@ const columns: Column<CouponType>[] = [
     {
         header: 'Usage',
         accessor: (item) => {
-            if (item.max_uses !== null) {
-                return `${item.uses} / ${item.max_uses}`;
+            if (item.usage_limit !== null) {
+                return `${item.used_count} / ${item.usage_limit}`;
             }
             return 'Unlimited';
         },
-
         className: 'w-1/12',
     },
     {
         header: 'Starts At',
         accessor: (item) => {
-            return item.starts_at ? new Date(item.starts_at).toLocaleDateString() : 'Immediate';
+            return item.start_date ? new Date(item.start_date).toLocaleDateString() : 'Immediate';
         },
         className: 'w-1/12',
     },
     {
         header: 'Expires At',
         accessor: (item) => {
-            return item.expires_at ? new Date(item.expires_at).toLocaleDateString() : 'Never';
+            return item.end_date ? new Date(item.end_date).toLocaleDateString() : 'Never';
         },
         className: 'w-1/12',
     },

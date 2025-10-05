@@ -25,18 +25,18 @@ class UpdateCouponRequest extends FormRequest
         $couponId = $this->route('coupon')->id; // Get the ID from route model binding
 
         return [
-            'code' => [
+            'coupon_code' => [
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('coupons', 'code')->ignore($couponId),
+                Rule::unique('coupons', 'coupon_code')->ignore($couponId),
             ],
-            'type' => ['required', 'in:percentage,fixed_amount,free_shipping'],
-            'value' => ['required_if:type,percentage,fixed_amount', 'numeric', 'min:0'],
-            'min_amount' => ['nullable', 'numeric', 'min:0'],
-            'max_uses' => ['nullable', 'integer', 'min:1'],
-            'starts_at' => ['nullable', 'date', 'after_or_equal:today'],
-            'expires_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
+            'discount_type' => ['required', 'in:percentage,fixed_amount'],
+            'discount_value' => ['required_if:discount_type,percentage,fixed_amount', 'numeric', 'min:0'],
+            'min_order_amount' => ['nullable', 'numeric', 'min:0'],
+            'usage_limit' => ['nullable', 'integer', 'min:1'],
+            'start_date' => ['nullable', 'date', 'after_or_equal:today'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'description' => ['nullable', 'string', 'max:500'],
             'is_active' => ['boolean'],
         ];
@@ -50,8 +50,8 @@ class UpdateCouponRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'value.required_if' => 'The value field is required when the coupon type is percentage or fixed amount.',
-            'expires_at.after_or_equal' => 'The expiry date must be after or equal to the start date.',
+            'discount_value.required_if' => 'The value field is required when the coupon type is percentage or fixed amount.',
+            'end_date.after_or_equal' => 'The expiry date must be after or equal to the start date.',
         ];
     }
 }

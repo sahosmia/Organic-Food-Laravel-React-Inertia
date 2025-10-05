@@ -61,7 +61,7 @@ class User extends Authenticatable
                 $formattedCart[$cartItem->product_id] = [
                     'id' => $cartItem->product_id,
                     'name' => $cartItem->product->name,
-                    'price' => (float) $cartItem->product->price,
+                    'price' => (float) $cartItem->product->discounted_price,
                     'quantity' => (int) $cartItem->quantity,
                     'image_url' => $cartItem->product->image_url,
 

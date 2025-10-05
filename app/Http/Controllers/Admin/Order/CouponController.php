@@ -19,32 +19,32 @@ class CouponController extends Controller
 
         $coupons = Coupon::query()
             ->when($search, function ($query, $search) {
-                $query->where('code', 'like', "%{$search}%")
+                $query->where('coupon_code', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%");
             })
             ->when($status, function ($query, $status) {
                 if ($status === 'active') {
                     $query->where('is_active', true)
                         ->where(function ($q) {
-                            $q->whereNull('starts_at')
-                                ->orWhere('starts_at', '<=', now());
+                            $q->whereNull('start_date')
+                                ->orWhere('start_date', '<=', now());
                         })
                         ->where(function ($q) {
-                            $q->whereNull('expires_at')
-                                ->orWhere('expires_at', '>', now());
+                            $q->whereNull('end_date')
+                                ->orWhere('end_date', '>', now());
                         })
                         ->where(function ($q) {
-                            $q->whereNull('max_uses')
-                                ->orWhereColumn('uses', '<', 'max_uses');
+                            $q->whereNull('usage_limit')
+                                ->orWhereColumn('used_count', '<', 'usage_limit');
                         });
                 } elseif ($status === 'inactive') {
                     $query->where('is_active', false);
                 } elseif ($status === 'expired') {
-                    $query->whereNotNull('expires_at')
-                        ->where('expires_at', '<=', now());
+                    $query->whereNotNull('end_date')
+                        ->where('end_date', '<=', now());
                 } elseif ($status === 'upcoming') {
-                    $query->whereNotNull('starts_at')
-                        ->where('starts_at', '>', now());
+                    $query->whereNotNull('start_date')
+                        ->where('start_date', '>', now());
                 }
             })
             ->orderBy('created_at', 'desc')

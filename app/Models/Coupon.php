@@ -10,25 +10,23 @@ class Coupon extends Model
     use IsActive;
 
      protected $fillable = [
-        'code',
-        'type', // 'percentage', 'fixed_amount', 'free_shipping'
-        'value',
-        'min_amount',
-        'max_uses',
-        'uses',
-        'starts_at',
-        'expires_at',
+        'coupon_code',
+        'discount_type',
+        'discount_value',
+        'min_order_amount',
+        'usage_limit',
+        'used_count',
+        'start_date',
+        'end_date',
         'description',
         'is_active',
     ];
 
     protected $casts = [
-        // 'value' => 'decimal:2',
-        // 'min_amount' => 'decimal:2',
-        'max_uses' => 'integer',
-        'uses' => 'integer',
-        'starts_at' => 'date',
-        'expires_at' => 'date',
+        'usage_limit' => 'integer',
+        'used_count' => 'integer',
+        'start_date' => 'date',
+        'end_date' => 'date',
         'is_active' => 'boolean',
     ];
 
@@ -41,17 +39,17 @@ class Coupon extends Model
         }
 
         // Check start date
-        if ($this->starts_at && $this->starts_at->isFuture()) {
+        if ($this->start_date && $this->start_date->isFuture()) {
             return false;
         }
 
         // Check expiry date
-        if ($this->expires_at && $this->expires_at->isPast()) {
+        if ($this->end_date && $this->end_date->isPast()) {
             return false;
         }
 
         // Check usage limit
-        if ($this->max_uses !== null && $this->uses >= $this->max_uses) {
+        if ($this->usage_limit !== null && $this->used_count >= $this->usage_limit) {
             return false;
         }
 
@@ -65,7 +63,7 @@ class Coupon extends Model
             return false;
         }
 
-        if ($this->min_amount > 0 && $amount < $this->min_amount) {
+        if ($this->min_order_amount > 0 && $amount < $this->min_order_amount) {
             return false;
         }
 

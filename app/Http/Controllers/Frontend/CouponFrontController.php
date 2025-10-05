@@ -38,9 +38,9 @@ class CouponFrontController extends Controller
         $errorMessage = '';
 
         // Find Coupon form model
-        $coupon = Coupon::where('code', $couponCode)
+        $coupon = Coupon::where('coupon_code', $couponCode)
             ->active()
-            ->where('expires_at', '>', now())
+            ->where('end_date', '>', now())
             ->first();
 
 
@@ -60,7 +60,7 @@ class CouponFrontController extends Controller
             ])->withCookie($forgottenCookie);
         }
 
-        if ($coupon->max_uses !== null && $coupon->uses >= $coupon->max_uses) {
+        if ($coupon->usage_limit !== null && $coupon->used_count >= $coupon->usage_limit) {
 
 
             return response()->json([
@@ -78,7 +78,7 @@ class CouponFrontController extends Controller
 
         $cartSubtotal = collect($cartItems)->sum(fn($item) => $item['quantity'] * $item['product']['discounted_price']);
 
-        if ($cartSubtotal < $coupon->min_amount) {
+        if ($cartSubtotal < $coupon->min_order_amount) {
             $appDomain = Config::get('app.domain');
             $forgottenCookie = Cookie::forget('coupon', '/', $appDomain);
             return response()->json([
@@ -87,29 +87,23 @@ class CouponFrontController extends Controller
                 'coupon_result' => [
                     'discount_amount' => 0,
                     'is_free_shipping' => false,
-                    'message' => "Minimum purchase of $" . number_format($coupon->min_amount, 2) . " required for this coupon.",
+                    'message' => "Minimum purchase of $" . number_format($coupon->min_order_amount, 2) . " required for this coupon.",
                 ],
             ])->withCookie($forgottenCookie);
         }
         Cookie::queue('coupon', $couponCode, 120);
 
 
-        switch ($coupon->type) {
+        switch ($coupon->discount_type) {
             case 'fixed_amount':
-                $discountAmount = min($coupon->value, $cartSubtotal);
+                $discountAmount = min($coupon->discount_value, $cartSubtotal);
                 $message = "Fixed discount of $" . number_format($discountAmount, 2) . " applied.";
                 break;
 
             case 'percentage':
-                $discountAmount = ($cartSubtotal * $coupon->value) / 100;
-                $discountAmount = min($discountAmount, $coupon->max_discount_amount ?? $discountAmount);
+                $discountAmount = ($cartSubtotal * $coupon->discount_value) / 100;
                 $discountAmount = min($discountAmount, $cartSubtotal);
-                $message = "Percentage discount of " . $coupon->value . "% applied.";
-                break;
-
-            case 'free_shipping':
-                $isFreeShipping = true;
-                $message = "Free shipping applied!";
+                $message = "Percentage discount of " . $coupon->discount_value . "% applied.";
                 break;
 
             default:
@@ -135,7 +129,7 @@ class CouponFrontController extends Controller
 
         return response()->json([
             'cartSubtotal' => $cartSubtotal,
-            'code' => $request->couponCode,
+            'code' => $request->code,
             "coupon" => $coupon,
             'coupon_result' => [
                 'discount_amount' => $discountAmount,
