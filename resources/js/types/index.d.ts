@@ -179,17 +179,16 @@ export interface Column<T> {
 
 export interface CouponType {
     id: number;
-    code: string;
-    value: number | null;
-    min_amount: number | null;
-    max_uses: number | null;
-    starts_at: string;
-    expires_at: string | null;
+    coupon_code: string;
+    discount_value: number | null;
+    min_order_amount: number | null;
+    usage_limit: number | null;
+    start_date: string;
+    end_date: string | null;
     description: string | null;
     is_active: boolean;
-    type: "fixed_amount" | "free_shipping" | "percentage";
+    discount_type: "fixed_amount" | "percentage";
     created_at: string;
     updated_at: string;
-    uses: number;
-
+    used_count: number;
 }

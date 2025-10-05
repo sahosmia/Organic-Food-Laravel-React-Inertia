@@ -21,11 +21,11 @@ return new class extends Migration
             $table->decimal('discount_amount', 10, 2);
             $table->decimal('shipping_charge', 10, 2);
 
-            $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
 
             $table->string('payment_method', 50)->nullable();
 
-            $table->enum('payment_status', ['pending', 'paid', 'failed', 'refunded'])->default('pending');
+            $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
 
             $table->timestamp('order_date')->useCurrent();
 

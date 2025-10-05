@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Models\Coupon;
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutFrontController extends Controller{
 
@@ -17,7 +22,7 @@ class CheckoutFrontController extends Controller{
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
 
         $total = $cartItems->sum(function ($item) {
-            return $item->quantity * $item->product->price;
+            return $item->quantity * $item->product->discounted_price;
         });
 
         return Inertia::render('frontend/Checkout', [
@@ -30,34 +35,91 @@ class CheckoutFrontController extends Controller{
     // checkout place order
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+            'address_line_1' => 'required|string|max:255',
+            'address_line_2' => 'nullable|string|max:255',
+            'city' => 'required|string|max:100',
+            'district' => 'required|string|max:100',
+            'post_code' => 'required|string|max:20',
+            'payment_method' => 'required|string',
+        ]);
 
-     $data = $request->validate([
-        'name' => 'required|string|max:100',
-        'last_name' => 'required|string|max:100',
-        'email' => 'required|email|max:255',
-        'phone_number' => 'required|string|max:20',
-        'address' => 'required|string|max:255',
-        // 'city' => 'required|string|max:100',
-        // 'postal_code' => 'required|string|max:20',
-        // 'order_notes' => 'nullable|string',
-        // 'delivery_charge' => 'required|numeric|min:0',
-    ]);
+        $user = Auth::user();
+        $cartItems = Cart::where('user_id', $user->id)->with('product')->get();
 
- // store order
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+        }
 
- // store order item
- // delete cart
- // store address
- // delete coupon
- // incriment coupon uses
+        $subtotal = $cartItems->sum(function ($item) {
+            return $item->quantity * $item->product->discounted_price;
+        });
 
- return $data;
+        $discountAmount = 0;
+        $coupon = null;
+        $couponCode = Cookie::get('coupon');
 
- die();
+        if ($couponCode) {
+            $coupon = Coupon::where('coupon_code', $couponCode)->first();
+            if ($coupon && $coupon->isApplicable($subtotal)) {
+                 if ($coupon->discount_type === 'percentage') {
+                    $discountAmount = ($subtotal * $coupon->discount_value) / 100;
+                } else {
+                    $discountAmount = $coupon->discount_value;
+                }
+            }
+        }
 
-    // Clear user's cart
-    Cart::where('user_id', Auth::id())->delete();
+        $shippingCharge = 5.00;
+        $totalAmount = $subtotal - $discountAmount + $shippingCharge;
 
-    return redirect()->route('checkout')->with('success', 'Order placed successfully!');
+        DB::beginTransaction();
+        try {
+            $order = Order::create([
+                'user_id' => $user->id,
+                'coupon_id' => $coupon?->id,
+                'total_amount' => $totalAmount,
+                'discount_amount' => $discountAmount,
+                'shipping_charge' => $shippingCharge,
+                'status' => 'pending',
+                'payment_method' => $request->payment_method,
+                'payment_status' => 'unpaid',
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'address_line_1' => $request->address_line_1,
+                'address_line_2' => $request->address_line_2,
+                'city' => $request->city,
+                'district' => $request->district,
+                'post_code' => $request->post_code,
+            ]);
+
+            foreach ($cartItems as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->product->discounted_price,
+                    'subtotal' => $item->quantity * $item->product->discounted_price,
+                ]);
+            }
+
+            if ($coupon) {
+                $coupon->increment('used_count');
+            }
+
+            Cart::where('user_id', $user->id)->delete();
+            Cookie::queue(Cookie::forget('coupon'));
+
+            DB::commit();
+
+            return redirect()->route('checkout.order-confirmation')->with('success', 'Order placed successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('cart.index')->with('error', 'Failed to place order. Please try again.');
+        }
     }
 }

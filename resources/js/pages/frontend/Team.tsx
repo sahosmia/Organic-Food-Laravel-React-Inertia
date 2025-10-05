@@ -1,7 +1,7 @@
 import PageBanner from '@/components/frontend/tools/PageBanner';
 import bannerImage from "@/assets/banner/banner-team.jpg";
 import { PaginationType, TeamType } from '@/types';
-import TeamItem from '@/components/frontend/TeamITem';
+import TeamItem from '@/components/frontend/TeamItem';
 import FrontLayout from '@/layouts/front-layout';
 import { Head } from '@inertiajs/react';
 

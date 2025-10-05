@@ -21,7 +21,7 @@ function Cart({ cartItems, appliedCoupon }: { cartItems: CartType[], appliedCoup
 
     const [isFreeShipping, setIsFreeShipping] = useState(shipping || false);
     const [couponDiscount, setCouponDiscount] = useState(discountAmount || 0);
-    const [couponCode, setCouponCode] = useState(coupon?.code || '');
+    const [couponCode, setCouponCode] = useState(coupon?.coupon_code || '');
     const [couponError, setCouponError] = useState<string | null>(errorMessage || null);
     const [loading, setLoading] = useState(false)
     const [couponSuccess, setCouponSuccess] = useState<string | null>(message || null)

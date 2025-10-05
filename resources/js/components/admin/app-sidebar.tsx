@@ -74,36 +74,36 @@ const mainNavItems: NavItemWithSubmenu[] = [
         href: '',
         icon: ListOrdered,
         submenu: [
-            // {
-            //     title: "Order List",
-            //     href: "/admin/order-module/orders",
-            //     icon: ListChecks
-            // },
-            // {
-            //     title: "Pending Orders",
-            //     href: "/admin/order-module/pending-orders",
-            //     icon: Hourglass
-            // },
-            // {
-            //     title: "Completed Orders",
-            //     href: "/admin/order-module/completed-orders",
-            //     icon: CheckCircle
-            // },
-            // {
-            //     title: "Cancelled Orders",
-            //     href: "/admin/order-module/cancelled-orders",
-            //     icon: XCircle
-            // },
+            {
+                title: "Order List",
+                href: "/admin/order-module/orders",
+                icon: ListChecks
+            },
+            {
+                title: "Pending Orders",
+                href: "/admin/order-module/pending-orders",
+                icon: Hourglass
+            },
+            {
+                title: "Completed Orders",
+                href: "/admin/order-module/completed-orders",
+                icon: CheckCircle
+            },
+            {
+                title: "Cancelled Orders",
+                href: "/admin/order-module/cancelled-orders",
+                icon: XCircle
+            },
             {
                 title: "Coupon Code",
                 href: "/admin/order-module/coupons",
                 icon: Gift
             },
-            // {
-            //     title: "Refund Requests",
-            //     href: "/admin/order-module/refunds",
-            //     icon: DollarSign
-            // }
+            {
+                title: "Refund Requests",
+                href: "/admin/order-module/refunds",
+                icon: DollarSign
+            }
         ]
     }
 ];
@@ -117,7 +117,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href="/admin/dashboard" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
